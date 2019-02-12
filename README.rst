@@ -1,7 +1,7 @@
 QPayPro payment integration for pretix
 ==========================
 
-This is a plugin for `pretix`_. 
+This is a plugin for `pretix`_ to be able to use the `qpaypro`_ payments provider. 
 
 Development setup
 -----------------
@@ -30,3 +30,4 @@ Released under the terms of the Apache License 2.0
 
 .. _pretix: https://github.com/pretix/pretix
 .. _pretix development setup: https://docs.pretix.eu/en/latest/development/setup.html
+.. _qpaypro: https://qpaypro.zendesk.com/hc/es
