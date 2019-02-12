@@ -1,0 +1,52 @@
+{% load i18n %}
+
+{% if payment_info %}
+    {% if "id" in payment_info %}
+        <dl class="dl-horizontal">
+            <dt>{% trans "ID" %}</dt>
+            <dd>{{ payment_info.id }}</dd>
+            <dt>{% trans "Status" %}</dt>
+            <dd>{{ payment_info.status }}</dd>
+            {% if payment_info.status == "paid" %}
+                <dt>{% trans "Paid at" %}</dt>
+                <dd>{{ payment_info.paidAt }}</dd>
+            {% endif %}
+            {% if payment_info.status == "pending" or payment_info.status == "open" %}
+                <dt>{% trans "Expires at" %}</dt>
+                <dd>{{ payment_info.expiresAt }}</dd>
+            {% endif %}
+            <dt>{% trans "Settlement amount" %}</dt>
+            <dd>{{ payment_info.settlementAmount.currency }} {{ payment_info.settlementAmount.value }}</dd>
+            {% if payment_info.details.cardHolder %}
+                <dt>{% trans "Card holder" %}</dt>
+                <dd>{{ payment_info.details.cardHolder }}</dd>
+            {% endif %}
+            {% if payment_info.details.cardNumber %}
+                <dt>{% trans "Card number" %}</dt>
+                <dd>****{{ payment_info.details.cardNumber }}</dd>
+            {% endif %}
+            {% if payment_info.details.cardLabel %}
+                <dt>{% trans "Card type" %}</dt>
+                <dd>{{ payment_info.details.cardLabel }}</dd>
+            {% endif %}
+            {% if payment_info.details.consumerName %}
+                <dt>{% trans "Payer name" %}</dt>
+                <dd>{{ payment_info.details.consumerName }}</dd>
+            {% endif %}
+            {% if payment_info.details.consumerBic %}
+                <dt>{% trans "BIC" %}</dt>
+                <dd>{{ payment_info.details.consumerBic }}</dd>
+            {% endif %}
+            {% if payment_info.details.bitcoinAmount %}
+                <dt>{% trans "Bitcoin amount" %}</dt>
+                <dd>{{ payment_info.details.bitcoinAmount }}</dd>
+            {% endif %}
+        </dl>
+    {% endif %}
+    {% if "detail" in payment_info %}
+        <dl class="dl-horizontal">
+            <dt>{% trans "Error message" %}</dt>
+            <dd>{{ payment_info.detail }}</dd>
+        </dl>
+    {% endif %}
+{% endif %}

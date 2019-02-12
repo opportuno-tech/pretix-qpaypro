@@ -1,0 +1,3 @@
+recursive-include pretix_qpaypro/static *
+recursive-include pretix_qpaypro/templates *
+recursive-include pretix_qpaypro/locale *
