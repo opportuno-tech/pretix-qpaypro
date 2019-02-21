@@ -14,7 +14,7 @@ from pretix.base.signals import (
 )
 from pretix.helpers.urls import build_absolute_uri
 
-from .forms import QPayProKeyValidator
+from .settingsform import get_settings_form_fields
 
 logger = logging.getLogger(__name__)
 
@@ -22,26 +22,13 @@ logger = logging.getLogger(__name__)
 @receiver(register_payment_providers, dispatch_uid="payment_qpaypro")
 def register_payment_provider(sender, **kwargs):
     from .payment import (
-        QPayProSettingsHolder, QPayProCC, QPayProBancontact, QPayProBelfius,
-        QPayProBanktransfer, QPayProBitcoin, QPayProEPS,
-        QPayProGiropay, QPayProIdeal, QPayProINGHomePay, QPayProKBC,
-        QPayProPaysafecard, QPayProSofort
+        QPayProSettingsHolder, QPayProCC, QPayProVisaEnCuotas
     )
 
     return [
         QPayProSettingsHolder,
         QPayProCC,
-        QPayProBancontact,
-        QPayProBanktransfer,
-        QPayProBelfius,
-        QPayProBitcoin,
-        QPayProEPS,
-        QPayProGiropay,
-        QPayProIdeal,
-        QPayProINGHomePay,
-        QPayProKBC,
-        QPayProPaysafecard,
-        QPayProSofort
+        QPayProVisaEnCuotas
     ]
 
 
@@ -68,19 +55,7 @@ settings_hierarkey.add_default('payment_qpaypro_method_cc', True, bool)
 
 @receiver(register_global_settings, dispatch_uid='qpaypro_global_settings')
 def register_global_settings(sender, **kwargs):
-    return OrderedDict([
-        ('payment_qpaypro_connect_client_id', forms.CharField(
-            label=_('QPayPro Connect: Client ID'),
-            required=False,
-            validators=(
-                QPayProKeyValidator('app_'),
-            ),
-        )),
-        ('payment_qpaypro_connect_client_secret', forms.CharField(
-            label=_('QPayPro Connect: Client secret'),
-            required=False,
-        )),
-    ])
+    return OrderedDict(get_settings_form_fields('payment_qpaypro_connect_', False))
 
 
 @receiver(periodic_task, dispatch_uid='qpaypro_refresh_tokens')

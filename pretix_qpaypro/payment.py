@@ -21,7 +21,7 @@ from pretix.helpers.urls import build_absolute_uri as build_global_uri
 from pretix.multidomain.urlreverse import build_absolute_uri
 from requests import HTTPError
 
-from .forms import QPayProKeyValidator
+from .settingsform import get_settings_form_fields
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +34,7 @@ class QPayProSettingsHolder(BasePaymentProvider):
 
     def __init__(self, event: Event):
         super().__init__(event)
-        self.settings = SettingsSandbox('payment', 'QPayPro', event)
+        self.settings = SettingsSandbox('payment', 'qpaypro', event)
 
     def get_connect_url(self, request):
         request.session['payment_qpaypro_oauth_event'] = request.event.pk
@@ -77,42 +77,10 @@ class QPayProSettingsHolder(BasePaymentProvider):
 
     @property
     def settings_form_fields(self):
-        if self.settings.connect_client_id and not self.settings.api_key:
-            # QPayPro Connect
-            if self.settings.access_token:
-                fields = [
-                    ('connect_org_name',
-                     forms.CharField(
-                         label=_('QPayPro account'),
-                         disabled=True
-                     )),
-                    ('connect_profile',
-                     forms.ChoiceField(
-                         label=_('Website profile'),
-                         choices=self.settings.get('connect_profiles', as_type=list) or []
-                     )),
-                    ('endpoint',
-                     forms.ChoiceField(
-                         label=_('Endpoint'),
-                         initial='live',
-                         choices=(
-                             ('live', pgettext('QPayPro', 'Live')),
-                             ('test', pgettext('QPayPro', 'Testing')),
-                         ),
-                     )),
-                ]
-            else:
-                return {}
+        if (self.settings.connect_x_login and self.settings.connect_x_private_key and self.settings.connect_x_api_secret):
+            fields = []
         else:
-            fields = [
-                ('api_key',
-                 forms.CharField(
-                     label=_('Secret key'),
-                     validators=(
-                         QPayProKeyValidator(['live_', 'test_']),
-                     ),
-                 )),
-            ]
+            fields = get_settings_form_fields('', True)
         d = OrderedDict(
             fields + [
                 ('method_creditcard',
@@ -120,59 +88,9 @@ class QPayProSettingsHolder(BasePaymentProvider):
                      label=_('Credit card'),
                      required=False,
                  )),
-                ('method_bancontact',
+                ('method_visaencuotas',
                  forms.BooleanField(
-                     label=_('Bancontact'),
-                     required=False,
-                 )),
-                ('method_banktransfer',
-                 forms.BooleanField(
-                     label=_('Bank transfer'),
-                     required=False,
-                 )),
-                ('method_belfius',
-                 forms.BooleanField(
-                     label=_('Belfius Pay Button'),
-                     required=False,
-                 )),
-                ('method_bitcoin',
-                 forms.BooleanField(
-                     label=_('Bitcoin'),
-                     required=False,
-                 )),
-                ('method_eps',
-                 forms.BooleanField(
-                     label=_('EPS'),
-                     required=False,
-                 )),
-                ('method_giropay',
-                 forms.BooleanField(
-                     label=_('giropay'),
-                     required=False,
-                 )),
-                ('method_ideal',
-                 forms.BooleanField(
-                     label=_('iDEAL'),
-                     required=False,
-                 )),
-                ('method_inghomepay',
-                 forms.BooleanField(
-                     label=_('ING Home’Pay'),
-                     required=False,
-                 )),
-                ('method_kbc',
-                 forms.BooleanField(
-                     label=_('KBC/CBC Payment Button'),
-                     required=False,
-                 )),
-                ('method_paysafecard',
-                 forms.BooleanField(
-                     label=_('paysafecard'),
-                     required=False,
-                 )),
-                ('method_sofort',
-                 forms.BooleanField(
-                     label=_('Sofort'),
+                     label=_('Visa en cuotas'),
                      required=False,
                  )),
             ] + list(super().settings_form_fields.items())
@@ -188,7 +106,7 @@ class QPayProMethod(BasePaymentProvider):
 
     def __init__(self, event: Event):
         super().__init__(event)
-        self.settings = SettingsSandbox('payment', 'QPayPro', event)
+        self.settings = SettingsSandbox('payment', 'qpaypro', event)
 
     @property
     def settings_form_fields(self):
@@ -429,74 +347,7 @@ class QPayProCC(QPayProMethod):
     public_name = _('Credit card')
 
 
-class QPayProBancontact(QPayProMethod):
-    method = 'bancontact'
-    verbose_name = _('Bancontact via QPayPro')
-    public_name = _('Bancontact')
-
-
-class QPayProBanktransfer(QPayProMethod):
-    method = 'banktransfer'
-    verbose_name = _('Bank transfer via QPayPro')
-    public_name = _('Bank transfer')
-
-    def _get_payment_body(self, payment):
-        body = super()._get_payment_body(payment)
-        body['dueDate'] = (payment.order.expires.date() + timedelta(days=1)).isoformat()
-        return body
-
-
-class QPayProBelfius(QPayProMethod):
-    method = 'belfius'
-    verbose_name = _('Belfius Pay Button via QPayPro')
-    public_name = _('Belfius')
-
-
-class QPayProBitcoin(QPayProMethod):
-    method = 'bitcoin'
-    verbose_name = _('Bitcoin via QPayPro')
-    public_name = _('Bitcoin')
-    refunds_allowed = False
-
-
-class QPayProEPS(QPayProMethod):
-    method = 'eps'
-    verbose_name = _('EPS via QPayPro')
-    public_name = _('eps')
-
-
-class QPayProGiropay(QPayProMethod):
-    method = 'giropay'
-    verbose_name = _('giropay via QPayPro')
-    public_name = _('giropay')
-
-
-class QPayProIdeal(QPayProMethod):
-    method = 'ideal'
-    verbose_name = _('iDEAL via QPayPro')
-    public_name = _('iDEAL')
-
-
-class QPayProINGHomePay(QPayProMethod):
-    method = 'inghomepay'
-    verbose_name = _('ING Home’Pay via QPayPro')
-    public_name = _('ING Home’Pay')
-
-
-class QPayProKBC(QPayProMethod):
-    method = 'kbc'
-    verbose_name = _('KBC/CBC Payment Button via QPayPro')
-    public_name = _('KBC/CBC')
-
-
-class QPayProPaysafecard(QPayProMethod):
-    method = 'paysafecard'
-    verbose_name = _('paysafecard via QPayPro')
-    public_name = _('paysafecard')
-    refunds_allowed = False
-
-
-class QPayProSofort(QPayProMethod):
-    method = 'sofort'
-    verbose_name = _('Sofort via QPayPro')
-    public_name = _('Sofort')
+class QPayProVisaEnCuotas(QPayProMethod):
+    method = 'visaencuotas'
+    verbose_name = _('Visa en cuotas via QPayPro')
+    public_name = _('Visa en cuotas')
