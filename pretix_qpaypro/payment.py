@@ -36,48 +36,13 @@ class QPayProSettingsHolder(BasePaymentProvider):
         super().__init__(event)
         self.settings = SettingsSandbox('payment', 'qpaypro', event)
 
-    def get_connect_url(self, request):
-        request.session['payment_qpaypro_oauth_event'] = request.event.pk
-        if 'payment_qpaypro_oauth_token' not in request.session:
-            request.session['payment_qpaypro_oauth_token'] = get_random_string(32)
-        return (
-            "https://www.qpaypro.com/oauth2/authorize?client_id={}&redirect_uri={}"
-            "&state={}&scope=payments.read+payments.write+refunds.read+refunds.write+profiles.read+organizations.read"
-            "&response_type=code&approval_prompt=auto"
-        ).format(
-            self.settings.connect_client_id,
-            urlquote(build_global_uri('plugins:pretix_qpaypro:oauth.return')),
-            request.session['payment_qpaypro_oauth_token'],
-        )
-
-    def settings_content_render(self, request):
-        if self.settings.connect_client_id and not self.settings.api_key:
-            # Use QPayPro Connect
-            if not self.settings.access_token:
-                return (
-                    "<p>{}</p>"
-                    "<a href='{}' class='btn btn-primary btn-lg'>{}</a>"
-                ).format(
-                    _('To accept payments via QPayPro, you will need an account at QPayPro. By clicking on the '
-                      'following button, you can either create a new QPayPro account connect pretix to an existing '
-                      'one.'),
-                    self.get_connect_url(request),
-                    _('Connect with QPayPro')
-                )
-            else:
-                return (
-                    "<button formaction='{}' class='btn btn-danger'>{}</button>"
-                ).format(
-                    reverse('plugins:pretix_qpaypro:oauth.disconnect', kwargs={
-                        'organizer': self.event.organizer.slug,
-                        'event': self.event.slug,
-                    }),
-                    _('Disconnect from QPayPro')
-                )
 
     @property
     def settings_form_fields(self):
-        if (self.settings.connect_x_login and self.settings.connect_x_private_key and self.settings.connect_x_api_secret):
+        if (self.settings.general_x_login 
+        and self.settings.general_x_private_key 
+        and self.settings.general_x_api_secret 
+        and self.settings.general_x_endpoint):
             fields = []
         else:
             fields = get_settings_form_fields('', True)

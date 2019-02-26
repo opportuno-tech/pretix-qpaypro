@@ -54,8 +54,8 @@ settings_hierarkey.add_default('payment_qpaypro_method_cc', True, bool)
 
 
 @receiver(register_global_settings, dispatch_uid='qpaypro_global_settings')
-def register_global_settings(sender, **kwargs):
-    return OrderedDict(get_settings_form_fields('payment_qpaypro_connect_', False))
+def register_global_setting(sender, **kwargs):
+    return OrderedDict(get_settings_form_fields('payment_qpaypro_general_', False))
 
 
 @receiver(periodic_task, dispatch_uid='qpaypro_refresh_tokens')

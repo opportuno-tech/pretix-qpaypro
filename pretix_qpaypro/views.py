@@ -44,93 +44,6 @@ def redirect_view(request, *args, **kwargs):
     return r
 
 
-def oauth_return(request, *args, **kwargs):
-    if 'payment_qpaypro_oauth_event' not in request.session:
-        messages.error(request, _('An error occurred during connecting with QPayPro, please try again.'))
-        return redirect(reverse('control:index'))
-
-    event = get_object_or_404(Event, pk=request.session['payment_qpaypro_oauth_event'])
-
-    if request.GET.get('state') != request.session['payment_qpaypro_oauth_token']:
-        messages.error(request, _('An error occurred during connecting with QPayPro, please try again.'))
-        return redirect(reverse('control:event.settings.payment.provider', kwargs={
-            'organizer': event.organizer.slug,
-            'event': event.slug,
-            'provider': 'QPayPro'
-        }))
-
-    gs = GlobalSettingsObject()
-
-    try:
-        resp = requests.post('https://api.qpaypro.com/oauth2/tokens', auth=(
-            gs.settings.payment_qpaypro_connect_client_id,
-            gs.settings.payment_qpaypro_connect_client_secret
-        ), data={
-            'grant_type': 'authorization_code',
-            'code': request.GET.get('code'),
-            'redirect_uri': build_absolute_uri('plugins:pretix_qpaypro:oauth.return'),
-        })
-        resp.raise_for_status()
-        data = resp.json()
-
-        if 'error' not in data:
-            orgaresp = requests.get('https://api.qpaypro.com/v2/organizations/me', headers={
-                'Authorization': 'Bearer ' + data.get('access_token')
-            })
-            orgaresp.raise_for_status()
-            orgadata = orgaresp.json()
-
-            profilesurl = 'https://api.qpaypro.com/v2/profiles'
-            profiles = []
-            while profilesurl:
-                profilesresp = requests.get(profilesurl, headers={
-                    'Authorization': 'Bearer ' + data.get('access_token')
-                })
-                profilesresp.raise_for_status()
-                d = profilesresp.json()
-                profiles += d['_embedded']['profiles']
-                if d['_links']['next']:
-                    profilesurl = d['_links']['next']['href']
-                else:
-                    profilesurl = None
-    except:
-        logger.exception('Failed to obtain OAuth token')
-        messages.error(request, _('An error occurred during connecting with QPayPro, please try again.'))
-    else:
-        if 'error' in data:
-            messages.error(request, _('QPayPro returned an error: {}').format(data['error_description']))
-        elif not profiles:
-            messages.error(request, _('Please create a website profile in your QPayPro account and try again.'))
-        elif not orgadata.get('id', '') or not orgadata.get('name', ''):
-            messages.error(request, _('Please fill in your company details in your QPayPro account and try again.'))
-        else:
-            messages.success(request,
-                             _('Your QPayPro account is now connected to pretix. You can change the settings in '
-                               'detail below.'))
-            event.settings.payment_qpaypro_access_token = data['access_token']
-            event.settings.payment_qpaypro_refresh_token = data['refresh_token']
-            event.settings.payment_qpaypro_expires = time.time() + data['expires_in']
-            event.settings.payment_qpaypro_connect_org_id = orgadata.get('id')
-            event.settings.payment_qpaypro_connect_org_name = orgadata.get('name', '')
-            event.settings.payment_qpaypro_connect_profiles = [
-                [
-                    p.get('id'),
-                    p.get('name') + ' - ' + p.get('website', '')
-                ] for p in profiles
-            ]
-            event.settings.payment_qpaypro_connect_profile = profiles[0].get('id')
-
-            if request.session.get('payment_qpaypro_oauth_enable', False):
-                event.settings.payment_qpaypro__enabled = True
-                del request.session['payment_qpaypro_oauth_enable']
-
-    return redirect(reverse('control:event.settings.payment.provider', kwargs={
-        'organizer': event.organizer.slug,
-        'event': event.slug,
-        'provider': 'QPayPro'
-    }))
-
-
 def handle_payment(payment, qpaypro_id):
     pprov = payment.payment_provider
     if pprov.settings.connect_client_id and pprov.settings.access_token and pprov.settings.endpoint == "test":
@@ -201,24 +114,6 @@ def handle_payment(payment, qpaypro_id):
         raise PaymentException(_('We had trouble communicating with QPayPro. Please try again and get in touch '
                                  'with us if this problem persists.'))
 
-
-@event_permission_required('can_change_event_settings')
-@require_POST
-def oauth_disconnect(request, **kwargs):
-    del request.event.settings.payment_qpaypro_access_token
-    del request.event.settings.payment_qpaypro_refresh_token
-    del request.event.settings.payment_qpaypro_expires
-    del request.event.settings.payment_qpaypro_connect_org_id
-    del request.event.settings.payment_qpaypro_connect_org_name
-    del request.event.settings.payment_qpaypro_connect_profiles
-    request.event.settings.payment_qpaypro__enabled = False
-    messages.success(request, _('Your QPayPro account has been disconnected.'))
-
-    return redirect(reverse('control:event.settings.payment.provider', kwargs={
-        'organizer': request.event.organizer.slug,
-        'event': request.event.slug,
-        'provider': 'QPayPro'
-    }))
 
 
 class QPayProOrderView:
