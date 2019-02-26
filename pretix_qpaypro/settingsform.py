@@ -8,7 +8,7 @@ def get_settings_form_fields(prefix, required):
                 prefix=prefix
             ),
             forms.CharField(
-                label=_('QPayPro Connect: Login'),
+                label=_('QPayPro: Login'),
                 required=required,
                 help_text=_('{text1} <a target="_blank" rel="noopener" href="{docs_url}">{text2}</a>').format(
                     text1=_('Also referred to as \"Public Key\".'),
@@ -20,7 +20,7 @@ def get_settings_form_fields(prefix, required):
                 prefix=prefix
             ),
             forms.CharField(
-                label=_('QPayPro Connect: Private Key'),
+                label=_('QPayPro: Private Key'),
                 required=required,
                 max_length=32,
                 min_length=11,
@@ -30,9 +30,21 @@ def get_settings_form_fields(prefix, required):
                 prefix=prefix
             ),
             forms.CharField(
-                label=_('QPayPro Connect: API Secret'),
+                label=_('QPayPro: API Secret'),
                 required=required,
                 max_length=32,
                 min_length=11,
+            )),
+        (('{prefix}x_endpoint').format(
+                prefix=prefix
+            ),
+            forms.ChoiceField(
+                label=_('QPayPro: Endpoint'),
+                required=required,
+                initial='sandbox',
+                choices=(
+                    ('sandbox', 'Sandbox'),
+                    ('live', 'Live'),
+                ),
             )),
     ]
