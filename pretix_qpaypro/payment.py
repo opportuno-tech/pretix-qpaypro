@@ -21,7 +21,8 @@ from pretix.helpers.urls import build_absolute_uri as build_global_uri
 from pretix.multidomain.urlreverse import build_absolute_uri
 from requests import HTTPError
 
-from .settingsform import get_settings_form_fields
+from .formfields.settings import get_settings_form_fields
+from .formfields.payment import get_payment_form_fields
 
 logger = logging.getLogger(__name__)
 
@@ -107,9 +108,20 @@ class QPayProMethod(BasePaymentProvider):
             headers['Authorization'] = 'Bearer %s' % self.settings.api_key
         return headers
 
+    @property
+    def payment_form_fields(self):
+        return OrderedDict(get_payment_form_fields())
+
     def payment_form_render(self, request) -> str:
         template = get_template('pretix_qpaypro/checkout_payment_form.html')
-        ctx = {'request': request, 'event': self.event, 'settings': self.settings}
+        from datetime import datetime
+        ctx = {
+            'request': request,
+            'event': self.event,
+            'settings': self.settings,
+            'form': self.payment_form(request),
+            'date': datetime.now()
+        }
         return template.render(ctx)
 
     def checkout_confirm_render(self, request) -> str:

@@ -14,7 +14,7 @@ from pretix.base.signals import (
 )
 from pretix.helpers.urls import build_absolute_uri
 
-from .settingsform import get_settings_form_fields
+from .formfields.settings import get_settings_form_fields
 
 logger = logging.getLogger(__name__)
 
