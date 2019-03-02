@@ -47,4 +47,18 @@ def get_settings_form_fields(prefix, required):
                     ('live', 'Live'),
                 ),
             )),
+        (('{prefix}x_org_id').format(
+                prefix=prefix
+            ),
+            forms.CharField(
+                label=_('QPayPro: Org ID'),
+                required=required,
+                max_length=8,
+                min_length=8,
+                help_text=_('{text1} <a target="_blank" rel="noopener" href="{docs_url}">{text2}</a>').format(
+                    text1=_('Required to generate client device fingerprint.'),
+                    text2=_('Click here to access the associated documentation.'),
+                    docs_url='https://qpaypro.zendesk.com/hc/es/articles/115002159651-Device-Fingerprint'
+                ),
+            )),
     ]
