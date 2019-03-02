@@ -200,6 +200,6 @@ def forward_onlinemetrix(request, **kwargs):
     try:
         url = request.path.replace(onlinemetrix_internal_url, onlinemetrix_external_url)
         resp = requests.get(url, params=request.GET)
-        return HttpResponse(resp)
+        return HttpResponse(resp.content, content_type=resp.headers.get('content-type'))
     except RequestException:
         raise HttpResponseBadRequest(_('External objects could not be obtained'))
