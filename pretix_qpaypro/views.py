@@ -24,7 +24,7 @@ from pretix.base.settings import GlobalSettingsObject
 from pretix.control.permissions import event_permission_required
 from pretix.helpers.urls import build_absolute_uri
 from pretix.multidomain.urlreverse import eventreverse
-from requests import HTTPError
+from requests import HTTPError, RequestException
 
 logger = logging.getLogger(__name__)
 
@@ -201,5 +201,5 @@ def forward_onlinemetrix(request, **kwargs):
         url = request.path.replace(onlinemetrix_internal_url, onlinemetrix_external_url)
         resp = requests.get(url, params=request.GET)
         return HttpResponse(resp)
-    except HTTPError:
+    except RequestException:
         raise HttpResponseBadRequest(_('External objects could not be obtained'))
