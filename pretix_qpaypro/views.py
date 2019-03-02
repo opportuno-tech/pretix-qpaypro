@@ -186,3 +186,20 @@ class WebhookView(View):
         return get_object_or_404(OrderPayment.objects.filter(order__event=self.request.event),
                                  pk=self.kwargs['payment'],
                                  provider__startswith='QPayPro')
+
+
+# Code needed to handle the device fingerprint security measure,
+# additional information can be obtained at:
+# https://qpaypro.zendesk.com/hc/es/articles/115002159651-Device-Fingerprint
+# https://developer.propay.com/Payment-Facilitators/Boarding/Boarding-Fraud-Monitoring
+
+onlinemetrix_internal_url = '/_qpaypro/h.online-metrix.net/'
+onlinemetrix_external_url = 'https://h.online-metrix.net/'
+
+def forward_onlinemetrix(request, **kwargs):
+    try:
+        url = request.path.replace(onlinemetrix_internal_url, onlinemetrix_external_url)
+        resp = requests.get(url, params=request.GET)
+        return HttpResponse(resp)
+    except HTTPError:
+        raise HttpResponseBadRequest(_('External objects could not be obtained'))
