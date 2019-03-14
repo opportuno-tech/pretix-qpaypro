@@ -37,13 +37,17 @@ class QPayProSettingsHolder(BasePaymentProvider):
         super().__init__(event)
         self.settings = SettingsSandbox('payment', 'qpaypro', event)
 
+    @property
+    def were_general_settings_provided(self):
+        return bool(self.settings.general_x_login 
+                and self.settings.general_x_private_key 
+                and self.settings.general_x_api_secret 
+                and self.settings.general_x_endpoint
+                and self.settings.general_x_org_id)
 
     @property
     def settings_form_fields(self):
-        if (self.settings.general_x_login 
-        and self.settings.general_x_private_key 
-        and self.settings.general_x_api_secret 
-        and self.settings.general_x_endpoint):
+        if (self.were_general_settings_provided):
             fields = []
         else:
             fields = get_settings_form_fields('', True)
@@ -64,8 +68,24 @@ class QPayProSettingsHolder(BasePaymentProvider):
         d.move_to_end('_enabled', last=False)
         return d
 
+    def get_key(self, key):
+        if (self.were_general_settings_provided):
+            return 'general_{0}'.format(key)
+        else:
+            return key
 
-class QPayProMethod(BasePaymentProvider):
+    def payment_is_valid_session(self, request):
+        return (
+            request.session.get('payment_qpaypro_cc_type', '') != '' and
+            request.session.get('payment_qpaypro_cc_number', '') != '' and
+            request.session.get('payment_qpaypro_cc_exp_month', '') != '' and
+            request.session.get('payment_qpaypro_cc_exp_year', '') != '' and
+            request.session.get('payment_qpaypro_cc_cvv2', '') != '' and
+            request.session.get('payment_qpaypro_cc_name', '') != ''
+        )
+
+
+class QPayProMethod(QPayProSettingsHolder):
     method = ''
     abort_pending_allowed = False
     refunds_allowed = True
@@ -113,14 +133,10 @@ class QPayProMethod(BasePaymentProvider):
         return OrderedDict(get_payment_form_fields())
 
     def payment_form_render(self, request) -> str:
-        template = get_template('pretix_qpaypro/checkout_payment_form.html')
-        from datetime import datetime
+        template = get_template('pretix_qpaypro/checkout_payment_form.html') 
         ctx = {
             'request': request,
-            'event': self.event,
-            'settings': self.settings,
             'form': self.payment_form(request),
-            'date': datetime.now()
         }
         return template.render(ctx)
 
