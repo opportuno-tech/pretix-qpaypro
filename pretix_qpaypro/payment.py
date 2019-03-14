@@ -23,6 +23,7 @@ from requests import HTTPError
 
 from .formfields.settings import get_settings_form_fields
 from .formfields.payment import get_payment_form_fields
+from .formfields.custom_validators import mask_cc_number
 
 logger = logging.getLogger(__name__)
 
@@ -68,7 +69,7 @@ class QPayProSettingsHolder(BasePaymentProvider):
         d.move_to_end('_enabled', last=False)
         return d
 
-    def get_key(self, key):
+    def get_settings_key(self, key):
         if (self.were_general_settings_provided):
             return 'general_{0}'.format(key)
         else:
@@ -107,8 +108,11 @@ class QPayProMethod(QPayProSettingsHolder):
     def payment_prepare(self, request, payment):
         return self.checkout_prepare(request, None)
 
+    def get_payment_key_prefix(self):
+        return 'payment_{0}_'.format(self.identifier)
+
     def payment_is_valid_session(self, request: HttpRequest):
-        key_prefix = 'payment_{0}_'.format(self.identifier)
+        key_prefix = self.get_payment_key_prefix()
         return (
             request.session.get(key_prefix + 'cc_type' '') != '' and
             request.session.get(key_prefix + 'cc_number', '') != '' and
@@ -133,7 +137,19 @@ class QPayProMethod(QPayProSettingsHolder):
 
     def checkout_confirm_render(self, request) -> str:
         template = get_template('pretix_qpaypro/checkout_payment_confirm.html')
-        ctx = {'request': request, 'event': self.event, 'settings': self.settings, 'provider': self}
+        key_prefix = self.get_payment_key_prefix()
+        ctx = {
+            'request': request, 
+            'event': self.event,
+            'settings': self.settings,
+            'provider': self,
+            'cc_type': request.session[key_prefix + 'cc_type'].upper(),
+            'cc_number': mask_cc_number(request.session[key_prefix + 'cc_number']),
+            'cc_exp_month': request.session[key_prefix + 'cc_exp_month'],
+            'cc_exp_year': request.session[key_prefix + 'cc_exp_year'],
+            'cc_cvv2': request.session[key_prefix + 'cc_cvv2'],
+            'cc_name': request.session[key_prefix + 'cc_name'],
+        }
         return template.render(ctx)
 
     def payment_can_retry(self, payment):

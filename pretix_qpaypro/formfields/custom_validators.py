@@ -131,3 +131,8 @@ class CreditCardField(forms.CharField):
                 checksum += int(c)
             factor = 3 - factor
         return checksum % 10 == 0
+
+
+# This method is used to mask a CC number for display
+def mask_cc_number(cc_number: str):
+    return cc_number[-4:].rjust(len(cc_number), "*")
