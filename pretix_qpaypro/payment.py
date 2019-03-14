@@ -132,14 +132,6 @@ class QPayProMethod(QPayProSettingsHolder):
     def payment_form_fields(self):
         return OrderedDict(get_payment_form_fields())
 
-    def payment_form_render(self, request) -> str:
-        template = get_template('pretix_qpaypro/checkout_payment_form.html') 
-        ctx = {
-            'request': request,
-            'form': self.payment_form(request),
-        }
-        return template.render(ctx)
-
     def checkout_confirm_render(self, request) -> str:
         template = get_template('pretix_qpaypro/checkout_payment_confirm.html')
         ctx = {'request': request, 'event': self.event, 'settings': self.settings, 'provider': self}
