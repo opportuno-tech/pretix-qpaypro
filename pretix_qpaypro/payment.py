@@ -28,7 +28,7 @@ logger = logging.getLogger(__name__)
 
 
 class QPayProSettingsHolder(BasePaymentProvider):
-    identifier = 'QPayPro'
+    identifier = 'qpaypro'
     verbose_name = _('QPayPro')
     is_enabled = False
     is_meta = True
@@ -74,15 +74,6 @@ class QPayProSettingsHolder(BasePaymentProvider):
         else:
             return key
 
-    def payment_is_valid_session(self, request):
-        return (
-            request.session.get('payment_qpaypro_cc_type', '') != '' and
-            request.session.get('payment_qpaypro_cc_number', '') != '' and
-            request.session.get('payment_qpaypro_cc_exp_month', '') != '' and
-            request.session.get('payment_qpaypro_cc_exp_year', '') != '' and
-            request.session.get('payment_qpaypro_cc_cvv2', '') != '' and
-            request.session.get('payment_qpaypro_cc_name', '') != ''
-        )
 
 
 class QPayProMethod(QPayProSettingsHolder):
@@ -117,7 +108,15 @@ class QPayProMethod(QPayProSettingsHolder):
         return self.checkout_prepare(request, None)
 
     def payment_is_valid_session(self, request: HttpRequest):
-        return True
+        key_prefix = 'payment_{0}_'.format(self.identifier)
+        return (
+            request.session.get(key_prefix + 'cc_type' '') != '' and
+            request.session.get(key_prefix + 'cc_number', '') != '' and
+            request.session.get(key_prefix + 'cc_exp_month', '') != '' and
+            request.session.get(key_prefix + 'cc_exp_year', '') != '' and
+            request.session.get(key_prefix + 'cc_cvv2', '') != '' and
+            request.session.get(key_prefix + 'cc_name', '') != ''
+        )
 
     @property
     def request_headers(self):
