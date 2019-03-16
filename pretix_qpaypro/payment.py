@@ -3,7 +3,7 @@ import json
 import logging
 import urllib.parse
 from collections import OrderedDict
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 import requests
 from django import forms
@@ -14,7 +14,7 @@ from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.http import urlquote
 from django.utils.translation import pgettext, ugettext_lazy as _
-from pretix.base.models import Event, OrderPayment, OrderRefund
+from pretix.base.models import Event, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.settings import SettingsSandbox
 from pretix.helpers.urls import build_absolute_uri as build_global_uri
@@ -159,7 +159,8 @@ class QPayProMethod(QPayProSettingsHolder):
             request.session.get(key_prefix + 'cc_exp_month', '') != '' and
             request.session.get(key_prefix + 'cc_exp_year', '') != '' and
             request.session.get(key_prefix + 'cc_cvv2', '') != '' and
-            request.session.get(key_prefix + 'cc_name', '') != ''
+            request.session.get(key_prefix + 'cc_name', '') != '' and
+            request.session.get(key_prefix + 'session_onlinemetrix', '') != ''
         )
 
     # @property
@@ -300,68 +301,99 @@ class QPayProMethod(QPayProSettingsHolder):
     #         )
     #     )
 
-    # def _get_payment_body(self, payment):
-    #     b = {
-    #         'amount': {
-    #             'currency': self.event.currency,
-    #             'value': str(payment.amount),
-    #         },
-    #         'description': 'Order {}-{}'.format(self.event.slug.upper(), payment.full_id),
-    #         'redirectUrl': build_absolute_uri(self.event, 'plugins:pretix_qpaypro:return', kwargs={
-    #             'order': payment.order.code,
-    #             'payment': payment.pk,
-    #             'hash': hashlib.sha1(payment.order.secret.lower().encode()).hexdigest(),
-    #         }),
-    #         'webhookUrl': build_absolute_uri(self.event, 'plugins:pretix_qpaypro:webhook', kwargs={
-    #             'payment': payment.pk
-    #         }),
-    #         'locale': self.get_locale(payment.order.locale),
-    #         'method': self.method,
-    #         'metadata': {
-    #             'organizer': self.event.organizer.slug,
-    #             'event': self.event.slug,
-    #             'order': payment.order.code,
-    #             'payment': payment.local_id,
-    #         }
-    #     }
-    #     if self.settings.connect_client_id and self.settings.access_token:
-    #         b['profileId'] = self.settings.connect_profile
-    #         b['testmode'] = self.settings.endpoint == 'test'
-    #     return b
+    def _get_payment_body(self, request: HttpRequest, payment: OrderPayment):
+        key_prefix = self.get_payment_key_prefix()
+        b = {
+            'x_login': self.get_settings_key('x_login'),
+            'x_private_key': self.get_settings_key('x_private_key'),
+            'x_api_secret': self.get_settings_key('x_api_secret'),
+            'x_description': 'Order {}-{}'.format(self.event.slug.upper(), payment.full_id),
+            'x_amount': str(payment.amount),
+            'x_freight': '',
+            'x_currency_code': self.event.currency,
+            'x_product_id': payment.order.code,
+            'x_audit_number': payment.order.code,
+            'x_line_item': '{description}<|>{code}<|>{quantity}<|>{value}<|>'.format(
+                description = self.event.slug.upper(), 
+                code = payment.order.code,
+                quantity = '1',
+                value = str(payment.amount)
+            ),
+            'x_email': 'alvaro.ruano90@yahoo.com',
+            'x_fp_sequence': payment.order.code,
+            'x_fp_timestamp': str(datetime.now()),
+            'x_invoice_num': payment.order.code,
+            'x_first_name': 'Alvaro',
+            'x_last_name': 'Ruano',
+            'x_company': 'C/F',
+            'x_address': 'Ciudad',
+            'x_city': 'Guatemala',
+            'x_state': 'Guatemala',
+            'x_zip': '01057',
+            'x_country': 'Guatemala',
+            'x_relay_response': 'TRUE',
+            'x_relay_url': 'https://midominio.com/success',
+            'x_type': 'AUTH_ONLY',
+            'x_method': 'CC',
+            'visaencuotas': 0,
+            'cc_number': request.session.get(key_prefix + 'cc_number', ''),
+            'cc_exp': '{}/{}'.format(
+                request.session.get(key_prefix + 'cc_exp_month', ''),
+                str(request.session.get(key_prefix + 'cc_exp_year', ''))[-2:]
+            ),
+            'cc_cvv2': request.session.get(key_prefix + 'cc_cvv2', ''),
+            'cc_name': request.session.get(key_prefix + 'cc_name', ''),
+            'cc_type': request.session.get(key_prefix + 'cc_type', ''),
+            'device_fingerprint_id': request.session.get(key_prefix + 'session_onlinemetrix', ''),
+        }
+        return b
 
-    # def execute_payment(self, request: HttpRequest, payment: OrderPayment):
-    #     try:
-    #         req = requests.post(
-    #             'https://api.qpaypro.com/v2/payments',
-    #             json=self._get_payment_body(payment),
-    #             headers=self.request_headers
-    #         )
-    #         req.raise_for_status()
-    #     except HTTPError:
-    #         logger.exception('QPayPro error: %s' % req.text)
-    #         try:
-    #             payment.info_data = req.json()
-    #         except:
-    #             payment.info_data = {
-    #                 'error': True,
-    #                 'detail': req.text
-    #             }
-    #         payment.state = OrderPayment.PAYMENT_STATE_FAILED
-    #         payment.save()
-    #         payment.order.log_action('pretix.event.order.payment.failed', {
-    #             'local_id': payment.local_id,
-    #             'provider': payment.provider,
-    #             'data': payment.info_data
-    #         })
-    #         raise PaymentException(_('We had trouble communicating with QPayPro. Please try again and get in touch '
-    #                                  'with us if this problem persists.'))
+    def execute_payment(self, request: HttpRequest, payment: OrderPayment):
+        try:
+            # Get the correct endpoint to consume
+            x_endpoint = self.get_settings_key('x_endpoint')
+            if x_endpoint == 'live':
+                url = 'https://payments.qpaypro.com/checkout/api_v1'
+            else:
+                url = 'https://sandbox.qpaypro.com/payment/api_v1'
+            
+            # Perform the call to the endpoint
+            req = requests.post(
+                url,
+                json=self._get_payment_body(request, payment),
+            )
+            req.raise_for_status()
 
-    #     data = req.json()
-    #     payment.info = json.dumps(data)
-    #     payment.state = OrderPayment.PAYMENT_STATE_CREATED
-    #     payment.save()
-    #     request.session['payment_qpaypro_order_secret'] = payment.order.secret
-    #     return self.redirect(request, data.get('_links').get('checkout').get('href'))
+            # Load the response to be read
+            data = req.json()
+            
+            # The result is evaluated to determine the next step
+            if not (data['result'] == 1 and data['responseCode'] == 100):
+                raise PaymentException(data['responseText'])
+            
+            # To save the result
+            payment.info = req.json()
+            payment.confirm()
+        except (HTTPError, PaymentException, Quota.QuotaExceededException):
+            logger.exception('QPayPro error: %s' % req.text)
+            try:
+                payment.info_data = req.json()
+            except:
+                payment.info_data = {
+                    'error': True,
+                    'detail': req.text
+                }
+            payment.state = OrderPayment.PAYMENT_STATE_FAILED
+            payment.save()
+            payment.order.log_action('pretix.event.order.payment.failed', {
+                'local_id': payment.local_id,
+                'provider': payment.provider,
+                'data': payment.info_data
+            })
+            raise PaymentException(_('We had trouble communicating with QPayPro. Please try again and get in touch '
+                                     'with us if this problem persists.'))
+
+        return None
 
     # def redirect(self, request, url):
     #     if request.session.get('iframe_session', False):
