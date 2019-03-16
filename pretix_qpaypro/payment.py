@@ -138,7 +138,7 @@ class QPayProMethod(QPayProSettingsHolder):
         # Final URL using the result of all the previous steps
         signer = signing.Signer(salt='safe-redirect')
         url_final = (
-            build_absolute_uri(self.event, 'plugins:pretix_qpaypro:onlinemetrix') + '?' + 
+            eventreverse(self.event, 'plugins:pretix_qpaypro:onlinemetrix') + '?' + 
             'url_script=' + urllib.parse.quote(signer.sign(url_script)) + '&'
             'url_iframe=' + urllib.parse.quote(signer.sign(url_iframe)) + '&'
             'url_next=' + urllib.parse.quote(signer.sign(url_next))
