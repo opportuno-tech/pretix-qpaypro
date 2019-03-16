@@ -203,3 +203,21 @@ logger = logging.getLogger(__name__)
 #         return HttpResponse(resp.content, content_type=resp.headers.get('content-type'))
 #     except RequestException:
 #         raise HttpResponseBadRequest(_('External objects could not be obtained'))
+
+
+def onlinemetrix_view(request, *args, **kwargs):
+    signer = signing.Signer(salt='safe-redirect')
+    try:
+        url_script = signer.unsign(request.GET.get('url_script', ''))
+        url_iframe = signer.unsign(request.GET.get('url_iframe', ''))
+        url_next = signer.unsign(request.GET.get('url_next', ''))
+    except signing.BadSignature:
+        return HttpResponseBadRequest('Invalid parameters')
+
+    r = render(request, 'pretix_qpaypro/onlinemetrix.html', {
+        'url_script': url_script,
+        'url_iframe': url_iframe,
+        'url_next': url_next
+    })
+    r._csp_ignore = True
+    return r

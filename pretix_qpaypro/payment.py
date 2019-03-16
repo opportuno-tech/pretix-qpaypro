@@ -18,7 +18,7 @@ from pretix.base.models import Event, OrderPayment, OrderRefund
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.settings import SettingsSandbox
 from pretix.helpers.urls import build_absolute_uri as build_global_uri
-from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from requests import HTTPError
 
 from .formfields.settings import get_settings_form_fields
@@ -33,6 +33,7 @@ class QPayProSettingsHolder(BasePaymentProvider):
     verbose_name = _('QPayPro')
     is_enabled = False
     is_meta = True
+    url_onlinemetrix = 'https://h.online-metrix.net'
 
     def __init__(self, event: Event):
         super().__init__(event)
@@ -71,9 +72,8 @@ class QPayProSettingsHolder(BasePaymentProvider):
 
     def get_settings_key(self, key):
         if (self.were_general_settings_provided):
-            return 'general_{0}'.format(key)
-        else:
-            return key
+            key = 'general_{0}'.format(key)
+        return self.settings.get(key)
 
 
 
@@ -105,6 +105,46 @@ class QPayProMethod(QPayProSettingsHolder):
     # def payment_partial_refund_supported(self, payment: OrderPayment) -> bool:
     #     return self.refunds_allowed
 
+
+    def checkout_prepare(self, request, cart):
+        if not super().checkout_prepare(request, cart):
+            return False
+        
+        # Device fingerprint session id
+        session_onlinemetrix_key = self.get_payment_key_prefix() + 'session_onlinemetrix'
+        if not request.session.get(session_onlinemetrix_key, False):
+            request.session[session_onlinemetrix_key] = get_random_string(32)
+        
+        # Device fingerprint URLs
+        params = 'org_id={x_org_id}&session_id={x_login}{session_id}'.format(
+            x_org_id = self.get_settings_key('x_org_id'),
+            x_login = self.get_settings_key('x_login'),
+            session_id = request.session.get(session_onlinemetrix_key, '')
+        )
+        url_script = '{url}/fp/tags.js?{params}'.format(
+            url = self.url_onlinemetrix, 
+            params = params,
+        )
+        url_iframe = '{url}/fp/tags?{params}'.format(
+            url = self.url_onlinemetrix, 
+            params = params,
+        )
+
+        # Checkout URL
+        url_next = eventreverse(self.event, 'presale:event.checkout', kwargs={
+            'step': 'confirm',
+        })
+
+        # Final URL using the result of all the previous steps
+        signer = signing.Signer(salt='safe-redirect')
+        url_final = (
+            build_absolute_uri(self.event, 'plugins:pretix_qpaypro:onlinemetrix') + '?' + 
+            'url_script=' + urllib.parse.quote(signer.sign(url_script)) + '&'
+            'url_iframe=' + urllib.parse.quote(signer.sign(url_iframe)) + '&'
+            'url_next=' + urllib.parse.quote(signer.sign(url_next))
+        )
+        return url_final
+        
     def payment_prepare(self, request, payment):
         return self.checkout_prepare(request, None)
 
@@ -114,7 +154,7 @@ class QPayProMethod(QPayProSettingsHolder):
     def payment_is_valid_session(self, request: HttpRequest):
         key_prefix = self.get_payment_key_prefix()
         return (
-            request.session.get(key_prefix + 'cc_type' '') != '' and
+            request.session.get(key_prefix + 'cc_type', '') != '' and
             request.session.get(key_prefix + 'cc_number', '') != '' and
             request.session.get(key_prefix + 'cc_exp_month', '') != '' and
             request.session.get(key_prefix + 'cc_exp_year', '') != '' and

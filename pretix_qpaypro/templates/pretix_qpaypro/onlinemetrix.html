@@ -1,0 +1,49 @@
+{% load compress %}
+{% load i18n %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ settings.PRETIX_INSTANCE_NAME }}</title>
+    {% compress css %}
+        <link rel="stylesheet" type="text/x-scss" href="{% static "pretixbase/scss/cachedfiles.scss" %}"/>
+    {% endcompress %}
+    {% compress js %}
+        <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>
+    {% endcompress %}
+
+    <!-- The next page will be open until all the items in this page are loaded  -->
+    <script>
+        $(window).bind("load", function() {
+            window.location = '{{ url_next|escapejs }}';
+        });
+    </script>
+
+    <!-- DEVICE FINGERPRINT CODE -->
+    <script src="{{ url_script }}" type="application/javascript"></script>
+    <noscript>
+    <iframe style="width: 100px; height: 100px; border: 0; position: absolute; top: -5000px;" src="{{ url_iframe }}" >
+    </iframe>
+    </noscript>
+    <!-- END DEVICE FINGERPRINT CODE -->
+</head>
+<body>
+    <div class="container">
+        <img src="{% static "pretixbase/img/pretix-logo.svg" %}"/>
+        <br /><br />
+        <h1>{% trans "Device Fingerprint" %}</h1>
+        <p>
+            {% trans "For your security we're generating a device fingerprint which help us to detect malicious transactions." %}
+        </p>
+        <br />
+        <p>
+            {% trans "This page should be automatically closed after 10 seconds, if not, click the below link." %}
+        </p>
+        <p>
+            <a href="{{ url_next }}">
+                {% trans "Go to next step" %}
+            </a>
+        </p>
+    </div>
+</body>
+</html>
