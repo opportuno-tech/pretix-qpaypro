@@ -1,0 +1,11 @@
+{% load i18n %}
+{% load bootstrap3 %}
+
+<div class="form-horizontal">
+    {% bootstrap_form form layout='horizontal' %}
+    <p>
+        {% blocktrans trimmed %}
+            After you click  <strong>Continue</strong> you'll be redirected to another page which will generate a <strong>device fingerprint</strong>, this is a fraud analysis tool that help us to confirm you're a valid customer. This should take no more than 10 seconds, then you'll be redirected to the confirmation page.
+        {% endblocktrans %}
+    </p>
+</div>
