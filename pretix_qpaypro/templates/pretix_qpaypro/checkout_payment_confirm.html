@@ -1,31 +1,34 @@
 {% load i18n %}
 
-<dl class="dl-horizontal">
-    <dt>{% trans "Payment method" %}</dt>
-    <dd>{{ provider.public_name }}</dd>
-</dl>
-<dl class="dl-horizontal">
-    <dt>{% trans "Card Type" %}</dt>
-    <dd>{{ cc_type }}</dd>
-</dl>
-<dl class="dl-horizontal">
-    <dt>{% trans "Credit Card Number" %}</dt>
-    <dd>{{ cc_number }}</dd>
-</dl>
-<dl class="dl-horizontal">
-    <dt>{% trans "Expiration" %}</dt>
-    <dd>{{ cc_exp_month }} / {{ cc_exp_year }}</dd>
-</dl>
-<dl class="dl-horizontal">
-    <dt>{% trans "CVV2" %}</dt>
-    <dd>{{ cc_cvv2 }}</dd>
-</dl>
-<dl class="dl-horizontal">
-    <dt>{% trans "Cardholder\'s Namee" %}</dt>
-    <dd>{{ cc_name }}</dd>
-</dl>
-<br />
-<p>{% blocktrans trimmed %}
-    After you submit your order, you'll be redirected to another page which will execute some fraud analysis tools to make sure you're a valid customer, this should take no more than 10 seconds.
-    You will then be redirected back here to get your tickets.
-{% endblocktrans %}</p>
+<div class="row cart-row">
+    <dl class="dl-horizontal">
+        <dt>{% trans "Payment Method" %}</dt>
+        <dd>{{ provider.public_name }}</dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>{% trans "Card Type" %}</dt>
+        <dd>{{ cc_type }}</dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>{% trans "Credit Card Number" %}</dt>
+        <dd>{{ cc_number }}</dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>{% trans "Expiration" %}</dt>
+        <dd>{{ cc_exp_month }} / {{ cc_exp_year }}</dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>{% trans "CVV2" %}</dt>
+        <dd>{{ cc_cvv2 }}</dd>
+    </dl>
+    <dl class="dl-horizontal">
+        <dt>{% trans "Cardholder\'s Name" %}</dt>
+        <dd>{{ cc_name }}</dd>
+    </dl>
+</div>
+<div class="row cart-row total">
+    <p>{% blocktrans trimmed %}
+        After you submit your order, you'll be redirected to another page which will execute some fraud analysis tools to make sure you're a valid customer, this should take no more than 10 seconds.
+        You will then be redirected back here to get your tickets.
+    {% endblocktrans %}</p>
+</div>
