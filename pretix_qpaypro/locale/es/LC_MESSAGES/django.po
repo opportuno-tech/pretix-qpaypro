@@ -20,11 +20,11 @@ msgstr ""
 
 #: pretix_qpaypro/__init__.py:10
 msgid "QPayPro payment integration for pretix"
-msgstr ""
+msgstr "Integración de pagos de QPayPro para pretix"
 
 #: pretix_qpaypro/__init__.py:12
 msgid "Integration for the QPayPro payment provider."
-msgstr ""
+msgstr "Integración para el proveedor de pagos de QPayPro"
 
 #: pretix_qpaypro/forms.py:17
 #, python-format
@@ -35,7 +35,7 @@ msgstr ""
 
 #: pretix_qpaypro/payment.py:31
 msgid "QPayPro"
-msgstr ""
+msgstr "QPayPro"
 
 #: pretix_qpaypro/payment.py:61
 msgid ""
@@ -46,15 +46,15 @@ msgstr ""
 
 #: pretix_qpaypro/payment.py:65
 msgid "Connect with QPayPro"
-msgstr ""
+msgstr "Conectar con QPayPro"
 
 #: pretix_qpaypro/payment.py:75
 msgid "Disconnect from QPayPro"
-msgstr ""
+msgstr "Desconectar con QPayPro"
 
 #: pretix_qpaypro/payment.py:86
 msgid "QPayPro account"
-msgstr ""
+msgstr "Cuenta de QPayPro"
 
 #: pretix_qpaypro/payment.py:91
 msgid "Website profile"
@@ -76,11 +76,11 @@ msgstr ""
 
 #: pretix_qpaypro/payment.py:110
 msgid "Secret key"
-msgstr ""
+msgstr "Clave Secreta"
 
 #: pretix_qpaypro/payment.py:120 pretix_qpaypro/payment.py:429
 msgid "Credit card"
-msgstr ""
+msgstr "Tarjeta de Crédito"
 
 #: pretix_qpaypro/payment.py:125 pretix_qpaypro/payment.py:435
 msgid "Bancontact"
