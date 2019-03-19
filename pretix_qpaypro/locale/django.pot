@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-12 07:41+0000\n"
+"POT-Creation-Date: 2019-03-19 15:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,339 +25,182 @@ msgstr ""
 msgid "Integration for the QPayPro payment provider."
 msgstr ""
 
-#: pretix_qpaypro/forms.py:17
-#, python-format
-msgid ""
-"The provided key \"%(value)s\" does not look valid. It should start with "
-"\"%(prefix)s\"."
+#: pretix_qpaypro/formfields/custom_validators.py:93
+msgid "The credit card number is invalid"
 msgstr ""
 
-#: pretix_qpaypro/payment.py:31
+#: pretix_qpaypro/formfields/payment.py:15
+#: pretix_qpaypro/templates/pretix_qpaypro/checkout_payment_confirm.html:9
+msgid "Card Type"
+msgstr ""
+
+#: pretix_qpaypro/formfields/payment.py:25
+#: pretix_qpaypro/templates/pretix_qpaypro/checkout_payment_confirm.html:13
+msgid "Credit Card Number"
+msgstr ""
+
+#: pretix_qpaypro/formfields/payment.py:33
+msgid "Expiration Month"
+msgstr ""
+
+#: pretix_qpaypro/formfields/payment.py:40
+msgid "Expiration Year"
+msgstr ""
+
+#: pretix_qpaypro/formfields/payment.py:44
+#, python-brace-format
+msgid "The full year should be provided, for example {0}."
+msgstr ""
+
+#: pretix_qpaypro/formfields/payment.py:48
+msgid "CVV2"
+msgstr ""
+
+#: pretix_qpaypro/formfields/payment.py:52
+msgid "3 or 4 digits code usually found in the back of the card."
+msgstr ""
+
+#: pretix_qpaypro/formfields/payment.py:56
+msgid "Cardholder's First Name"
+msgstr ""
+
+#: pretix_qpaypro/formfields/payment.py:59
+#: pretix_qpaypro/formfields/payment.py:66
+msgid "Exactly as appears in the card."
+msgstr ""
+
+#: pretix_qpaypro/formfields/payment.py:63
+msgid "Cardholder's Last Name"
+msgstr ""
+
+#: pretix_qpaypro/formfields/settings.py:11
+msgid "QPayPro: Login"
+msgstr ""
+
+#: pretix_qpaypro/formfields/settings.py:13
+#: pretix_qpaypro/formfields/settings.py:58
+#, python-brace-format
+msgid ""
+"{text1} <a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text2}</a>"
+msgstr ""
+
+#: pretix_qpaypro/formfields/settings.py:14
+msgid "Also referred to as \"Public Key\"."
+msgstr ""
+
+#: pretix_qpaypro/formfields/settings.py:15
+msgid "Click here to access the API information."
+msgstr ""
+
+#: pretix_qpaypro/formfields/settings.py:23
+msgid "QPayPro: Private Key"
+msgstr ""
+
+#: pretix_qpaypro/formfields/settings.py:27
+msgid "Also referred to as \"API Key\"."
+msgstr ""
+
+#: pretix_qpaypro/formfields/settings.py:33
+msgid "QPayPro: API Secret"
+msgstr ""
+
+#: pretix_qpaypro/formfields/settings.py:42
+msgid "QPayPro: Endpoint"
+msgstr ""
+
+#: pretix_qpaypro/formfields/settings.py:54
+msgid "QPayPro: Org ID"
+msgstr ""
+
+#: pretix_qpaypro/formfields/settings.py:59
+msgid "Required to generate client device fingerprint."
+msgstr ""
+
+#: pretix_qpaypro/formfields/settings.py:60
+msgid "Click here to access the associated documentation."
+msgstr ""
+
+#: pretix_qpaypro/formfields/settings.py:68
+msgid "QPayPro: Default Country"
+msgstr ""
+
+#: pretix_qpaypro/formfields/settings.py:75
+msgid "QPayPro: Default State"
+msgstr ""
+
+#: pretix_qpaypro/formfields/settings.py:82
+msgid "QPayPro: Default City"
+msgstr ""
+
+#: pretix_qpaypro/formfields/settings.py:89
+msgid "QPayPro: Default Zip Code"
+msgstr ""
+
+#: pretix_qpaypro/formfields/settings.py:96
+msgid "QPayPro: Default Address"
+msgstr ""
+
+#: pretix_qpaypro/payment.py:33
 msgid "QPayPro"
 msgstr ""
 
-#: pretix_qpaypro/payment.py:61
-msgid ""
-"To accept payments via QPayPro, you will need an account at QPayPro. By "
-"clicking on the following button, you can either create a new QPayPro "
-"account connect pretix to an existing one."
-msgstr ""
-
-#: pretix_qpaypro/payment.py:65
-msgid "Connect with QPayPro"
-msgstr ""
-
-#: pretix_qpaypro/payment.py:75
-msgid "Disconnect from QPayPro"
-msgstr ""
-
-#: pretix_qpaypro/payment.py:86
-msgid "QPayPro account"
-msgstr ""
-
-#: pretix_qpaypro/payment.py:91
-msgid "Website profile"
-msgstr ""
-
-#: pretix_qpaypro/payment.py:96
-msgid "Endpoint"
-msgstr ""
-
-#: pretix_qpaypro/payment.py:99
-msgctxt "QPayPro"
-msgid "Live"
-msgstr ""
-
-#: pretix_qpaypro/payment.py:100
-msgctxt "QPayPro"
-msgid "Testing"
-msgstr ""
-
-#: pretix_qpaypro/payment.py:110
-msgid "Secret key"
-msgstr ""
-
-#: pretix_qpaypro/payment.py:120 pretix_qpaypro/payment.py:429
+#: pretix_qpaypro/payment.py:64 pretix_qpaypro/payment.py:463
 msgid "Credit card"
 msgstr ""
 
-#: pretix_qpaypro/payment.py:125 pretix_qpaypro/payment.py:435
-msgid "Bancontact"
+#: pretix_qpaypro/payment.py:69 pretix_qpaypro/payment.py:469
+msgid "Visa en cuotas"
 msgstr ""
 
-#: pretix_qpaypro/payment.py:130 pretix_qpaypro/payment.py:441
-msgid "Bank transfer"
-msgstr ""
-
-#: pretix_qpaypro/payment.py:135
-msgid "Belfius Pay Button"
-msgstr ""
-
-#: pretix_qpaypro/payment.py:140 pretix_qpaypro/payment.py:458
-msgid "Bitcoin"
-msgstr ""
-
-#: pretix_qpaypro/payment.py:145
-msgid "EPS"
-msgstr ""
-
-#: pretix_qpaypro/payment.py:150 pretix_qpaypro/payment.py:471
-msgid "giropay"
-msgstr ""
-
-#: pretix_qpaypro/payment.py:155 pretix_qpaypro/payment.py:477
-msgid "iDEAL"
-msgstr ""
-
-#: pretix_qpaypro/payment.py:160 pretix_qpaypro/payment.py:483
-msgid "ING Home’Pay"
-msgstr ""
-
-#: pretix_qpaypro/payment.py:165
-msgid "KBC/CBC Payment Button"
-msgstr ""
-
-#: pretix_qpaypro/payment.py:170 pretix_qpaypro/payment.py:495
-msgid "paysafecard"
-msgstr ""
-
-#: pretix_qpaypro/payment.py:175 pretix_qpaypro/payment.py:502
-msgid "Sofort"
-msgstr ""
-
-#: pretix_qpaypro/payment.py:302
-msgid "QPayPro reported an error: {}"
-msgstr ""
-
-#: pretix_qpaypro/payment.py:391 pretix_qpaypro/views.py:201
+#: pretix_qpaypro/payment.py:430
 msgid ""
 "We had trouble communicating with QPayPro. Please try again and get in touch "
 "with us if this problem persists."
 msgstr ""
 
-#: pretix_qpaypro/payment.py:428
+#: pretix_qpaypro/payment.py:462
 msgid "Credit card via QPayPro"
 msgstr ""
 
-#: pretix_qpaypro/payment.py:434
-msgid "Bancontact via QPayPro"
+#: pretix_qpaypro/payment.py:468
+msgid "Visa en cuotas via QPayPro"
 msgstr ""
 
-#: pretix_qpaypro/payment.py:440
-msgid "Bank transfer via QPayPro"
+#: pretix_qpaypro/templates/pretix_qpaypro/checkout_payment_confirm.html:5
+msgid "Payment Method"
 msgstr ""
 
-#: pretix_qpaypro/payment.py:451
-msgid "Belfius Pay Button via QPayPro"
+#: pretix_qpaypro/templates/pretix_qpaypro/checkout_payment_confirm.html:17
+msgid "Expiration"
 msgstr ""
 
-#: pretix_qpaypro/payment.py:452
-msgid "Belfius"
+#: pretix_qpaypro/templates/pretix_qpaypro/checkout_payment_confirm.html:21
+msgid "Cardholder\\'s Name"
 msgstr ""
 
-#: pretix_qpaypro/payment.py:457
-msgid "Bitcoin via QPayPro"
-msgstr ""
-
-#: pretix_qpaypro/payment.py:464
-msgid "EPS via QPayPro"
-msgstr ""
-
-#: pretix_qpaypro/payment.py:465
-msgid "eps"
-msgstr ""
-
-#: pretix_qpaypro/payment.py:470
-msgid "giropay via QPayPro"
-msgstr ""
-
-#: pretix_qpaypro/payment.py:476
-msgid "iDEAL via QPayPro"
-msgstr ""
-
-#: pretix_qpaypro/payment.py:482
-msgid "ING Home’Pay via QPayPro"
-msgstr ""
-
-#: pretix_qpaypro/payment.py:488
-msgid "KBC/CBC Payment Button via QPayPro"
-msgstr ""
-
-#: pretix_qpaypro/payment.py:489
-msgid "KBC/CBC"
-msgstr ""
-
-#: pretix_qpaypro/payment.py:494
-msgid "paysafecard via QPayPro"
-msgstr ""
-
-#: pretix_qpaypro/payment.py:501
-msgid "Sofort via QPayPro"
-msgstr ""
-
-#: pretix_qpaypro/signals.py:54
-msgid "Payment canceled."
-msgstr ""
-
-#: pretix_qpaypro/signals.py:55
-msgid "Payment failed."
-msgstr ""
-
-#: pretix_qpaypro/signals.py:56
-msgid "Payment succeeded."
-msgstr ""
-
-#: pretix_qpaypro/signals.py:57
-msgid "Payment expired."
-msgstr ""
-
-#: pretix_qpaypro/signals.py:58
+#: pretix_qpaypro/templates/pretix_qpaypro/checkout_payment_form.html:7
 msgid ""
-"Payment method disabled since we were unable to refresh the access token. "
-"Please contact support."
+"After you click  <strong>Continue</strong> you'll be redirected to another "
+"page which will generate a <strong>device fingerprint</strong>, this is a "
+"fraud analysis tool that help us to confirm you're a valid customer. This "
+"should take no more than 10 seconds, then you'll be redirected to the "
+"confirmation page."
 msgstr ""
 
-#: pretix_qpaypro/signals.py:63
-msgid "QPayPro reported an event: {}"
+#: pretix_qpaypro/templates/pretix_qpaypro/onlinemetrix.html:30
+msgid "Device Fingerprint"
 msgstr ""
 
-#: pretix_qpaypro/signals.py:73
-msgid "QPayPro Connect: Client ID"
-msgstr ""
-
-#: pretix_qpaypro/signals.py:80
-msgid "QPayPro Connect: Client secret"
-msgstr ""
-
-#: pretix_qpaypro/templates/pretix_qpaypro/checkout_payment_confirm.html:3
-#: pretix_qpaypro/templates/pretix_qpaypro/checkout_payment_form.html:3
+#: pretix_qpaypro/templates/pretix_qpaypro/onlinemetrix.html:32
 msgid ""
-"After you submitted your order, we will redirect you to QPayPro to complete "
-"your payment. You will then be redirected back here to get your tickets."
+"We're generating a device fingerprint, this is a fraud analysis tool that "
+"help us to confirm you're a valid customer."
 msgstr ""
 
-#: pretix_qpaypro/templates/pretix_qpaypro/checkout_payment_confirm.html:8
-msgid "Payment method"
+#: pretix_qpaypro/templates/pretix_qpaypro/onlinemetrix.html:33
+msgid "This page should be automatically closed after 10 seconds."
 msgstr ""
 
-#: pretix_qpaypro/templates/pretix_qpaypro/control.html:6
-msgid "ID"
-msgstr ""
-
-#: pretix_qpaypro/templates/pretix_qpaypro/control.html:8
-msgid "Status"
-msgstr ""
-
-#: pretix_qpaypro/templates/pretix_qpaypro/control.html:11
-msgid "Paid at"
-msgstr ""
-
-#: pretix_qpaypro/templates/pretix_qpaypro/control.html:15
-msgid "Expires at"
-msgstr ""
-
-#: pretix_qpaypro/templates/pretix_qpaypro/control.html:18
-msgid "Settlement amount"
-msgstr ""
-
-#: pretix_qpaypro/templates/pretix_qpaypro/control.html:21
-msgid "Card holder"
-msgstr ""
-
-#: pretix_qpaypro/templates/pretix_qpaypro/control.html:25
-msgid "Card number"
-msgstr ""
-
-#: pretix_qpaypro/templates/pretix_qpaypro/control.html:29
-msgid "Card type"
-msgstr ""
-
-#: pretix_qpaypro/templates/pretix_qpaypro/control.html:33
-msgid "Payer name"
-msgstr ""
-
-#: pretix_qpaypro/templates/pretix_qpaypro/control.html:37
-msgid "BIC"
-msgstr ""
-
-#: pretix_qpaypro/templates/pretix_qpaypro/control.html:41
-msgid "Bitcoin amount"
-msgstr ""
-
-#: pretix_qpaypro/templates/pretix_qpaypro/control.html:48
-msgid "Error message"
-msgstr ""
-
-#: pretix_qpaypro/templates/pretix_qpaypro/pending.html:4
-msgid ""
-"We're waiting for an answer from the payment provider regarding your "
-"payment. Please contact us if this takes more than a few days."
-msgstr ""
-
-#: pretix_qpaypro/templates/pretix_qpaypro/pending.html:9
-msgid ""
-"The payment transaction could not be completed for the following reason:"
-msgstr ""
-
-#: pretix_qpaypro/templates/pretix_qpaypro/pending.html:16
-msgid "Unknown reason"
-msgstr ""
-
-#: pretix_qpaypro/templates/pretix_qpaypro/redirect.html:17
-msgid "The payment process has started in a new window."
-msgstr ""
-
-#: pretix_qpaypro/templates/pretix_qpaypro/redirect.html:20
-msgid "The window to enter your payment data was not opened or was closed?"
-msgstr ""
-
-#: pretix_qpaypro/templates/pretix_qpaypro/redirect.html:24
-msgid "Click here in order to open the window."
-msgstr ""
-
-#: pretix_qpaypro/views.py:49 pretix_qpaypro/views.py:55
-#: pretix_qpaypro/views.py:98
-msgid "An error occurred during connecting with QPayPro, please try again."
-msgstr ""
-
-#: pretix_qpaypro/views.py:101
-msgid "QPayPro returned an error: {}"
-msgstr ""
-
-#: pretix_qpaypro/views.py:103
-msgid "Please create a website profile in your QPayPro account and try again."
-msgstr ""
-
-#: pretix_qpaypro/views.py:105
-msgid ""
-"Please fill in your company details in your QPayPro account and try again."
-msgstr ""
-
-#: pretix_qpaypro/views.py:108
-msgid ""
-"Your QPayPro account is now connected to pretix. You can change the settings "
-"in detail below."
-msgstr ""
-
-#: pretix_qpaypro/views.py:215
-msgid "Your QPayPro account has been disconnected."
-msgstr ""
-
-#: pretix_qpaypro/views.py:257
-msgid ""
-"We received your payment but were unable to mark your ticket as the server "
-"was too busy. Please check beck in a couple of minutes."
-msgstr ""
-
-#: pretix_qpaypro/views.py:261
-msgid ""
-"We received your payment but were unable to mark your ticket as paid as one "
-"of your ordered products is sold out. Please contact the event organizer for "
-"further steps."
-msgstr ""
-
-#: pretix_qpaypro/views.py:268
-msgid ""
-"Sorry, there was an error in the payment process. Please check the link in "
-"your emails to continue."
+#: pretix_qpaypro/templates/pretix_qpaypro/onlinemetrix.html:34
+msgid "If not, click here"
 msgstr ""
