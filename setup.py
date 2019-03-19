@@ -25,9 +25,10 @@ cmdclass = {
 
 setup(
     name='pretix-qpaypro',
-    version='1.0.1',
+    version='1.0.3',
     description='Integration for the QPayPro payment provider.',
     long_description=long_description,
+    long_description_content_type='text/markdown',
     url='https://github.com/aruanoguate/pretix-qpaypro',
     author='Alvaro Enrique Ruano',
     author_email='alvaro.ruano90@outlook.com',

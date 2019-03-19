@@ -1,3 +1,6 @@
+include LICENSE
+include README.rst
 recursive-include pretix_qpaypro/static *
 recursive-include pretix_qpaypro/templates *
 recursive-include pretix_qpaypro/locale *
+recursive-include pretix_qpaypro/formfields *
