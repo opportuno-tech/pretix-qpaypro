@@ -72,7 +72,7 @@ msgstr ""
 #: pretix_qpaypro/payment.py:100
 msgctxt "QPayPro"
 msgid "Testing"
-msgstr ""
+msgstr "Modo Pruebas"
 
 #: pretix_qpaypro/payment.py:110
 msgid "Secret key"
@@ -128,17 +128,18 @@ msgstr ""
 
 #: pretix_qpaypro/payment.py:302
 msgid "QPayPro reported an error: {}"
-msgstr ""
+msgstr "QPayPro reportó un error: {}"
 
 #: pretix_qpaypro/payment.py:391 pretix_qpaypro/views.py:201
 msgid ""
 "We had trouble communicating with QPayPro. Please try again and get in touch "
 "with us if this problem persists."
-msgstr ""
+msgstr "Tuvimos problemas comunicándonos con QPayPro. Por favor intente de nuevo "
+" y pongase en contacto con nosotros si el problema persiste."
 
 #: pretix_qpaypro/payment.py:428
 msgid "Credit card via QPayPro"
-msgstr ""
+msgstr "Tarjeta de crédito por QPayPro"
 
 #: pretix_qpaypro/payment.py:434
 msgid "Bancontact via QPayPro"
@@ -198,19 +199,19 @@ msgstr ""
 
 #: pretix_qpaypro/signals.py:54
 msgid "Payment canceled."
-msgstr ""
+msgstr "Pago cancelado."
 
 #: pretix_qpaypro/signals.py:55
 msgid "Payment failed."
-msgstr ""
+msgstr "Pago fallido."
 
 #: pretix_qpaypro/signals.py:56
 msgid "Payment succeeded."
-msgstr ""
+msgstr "Pago existoso."
 
 #: pretix_qpaypro/signals.py:57
 msgid "Payment expired."
-msgstr ""
+msgstr "Pago expirado."
 
 #: pretix_qpaypro/signals.py:58
 msgid ""
@@ -220,15 +221,15 @@ msgstr ""
 
 #: pretix_qpaypro/signals.py:63
 msgid "QPayPro reported an event: {}"
-msgstr ""
+msgstr "QPayPro reportó un evento: {}"
 
 #: pretix_qpaypro/signals.py:73
 msgid "QPayPro Connect: Client ID"
-msgstr ""
+msgstr "Conectar QPayPro: ID del Cliente"
 
 #: pretix_qpaypro/signals.py:80
 msgid "QPayPro Connect: Client secret"
-msgstr ""
+msgstr "Conectar con QPayPro: Cliente secreto"
 
 #: pretix_qpaypro/templates/pretix_qpaypro/checkout_payment_confirm.html:3
 #: pretix_qpaypro/templates/pretix_qpaypro/checkout_payment_form.html:3
@@ -239,15 +240,15 @@ msgstr ""
 
 #: pretix_qpaypro/templates/pretix_qpaypro/checkout_payment_confirm.html:8
 msgid "Payment method"
-msgstr ""
+msgstr "Método de pago"
 
 #: pretix_qpaypro/templates/pretix_qpaypro/control.html:6
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: pretix_qpaypro/templates/pretix_qpaypro/control.html:8
 msgid "Status"
-msgstr ""
+msgstr "Estado"
 
 #: pretix_qpaypro/templates/pretix_qpaypro/control.html:11
 msgid "Paid at"
@@ -255,7 +256,7 @@ msgstr ""
 
 #: pretix_qpaypro/templates/pretix_qpaypro/control.html:15
 msgid "Expires at"
-msgstr ""
+msgstr "Expira en"
 
 #: pretix_qpaypro/templates/pretix_qpaypro/control.html:18
 msgid "Settlement amount"
@@ -263,15 +264,15 @@ msgstr ""
 
 #: pretix_qpaypro/templates/pretix_qpaypro/control.html:21
 msgid "Card holder"
-msgstr ""
+msgstr "Nombre Tarjeta"
 
 #: pretix_qpaypro/templates/pretix_qpaypro/control.html:25
 msgid "Card number"
-msgstr ""
+msgstr "Número de Tarjeta"
 
 #: pretix_qpaypro/templates/pretix_qpaypro/control.html:29
 msgid "Card type"
-msgstr ""
+msgstr "Tipo de tarjeta"
 
 #: pretix_qpaypro/templates/pretix_qpaypro/control.html:33
 msgid "Payer name"
@@ -287,7 +288,7 @@ msgstr ""
 
 #: pretix_qpaypro/templates/pretix_qpaypro/control.html:48
 msgid "Error message"
-msgstr ""
+msgstr "Mensaje de error"
 
 #: pretix_qpaypro/templates/pretix_qpaypro/pending.html:4
 msgid ""
@@ -323,7 +324,7 @@ msgstr ""
 
 #: pretix_qpaypro/views.py:101
 msgid "QPayPro returned an error: {}"
-msgstr ""
+msgstr "QPayPro retornó un error: {}"
 
 #: pretix_qpaypro/views.py:103
 msgid "Please create a website profile in your QPayPro account and try again."
