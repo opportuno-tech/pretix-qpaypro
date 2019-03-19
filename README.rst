@@ -1,5 +1,5 @@
 QPayPro payment integration for pretix
-==========================
+========================================
 
 .. image:: https://img.shields.io/pypi/v/pretix-qpaypro.svg
    :target: https://pypi.python.org/pypi/pretix-qpaypro
