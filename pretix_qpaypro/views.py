@@ -5,6 +5,7 @@ import time
 from decimal import Decimal
 
 import requests
+from django.conf import settings
 from django.contrib import messages
 from django.core import signing
 from django.http import Http404, HttpResponse, HttpResponseBadRequest
@@ -217,7 +218,8 @@ def onlinemetrix_view(request, *args, **kwargs):
     r = render(request, 'pretix_qpaypro/onlinemetrix.html', {
         'url_script': url_script,
         'url_iframe': url_iframe,
-        'url_next': url_next
+        'url_next': url_next,
+        'settings': settings,
     })
     r._csp_ignore = True
     return r
