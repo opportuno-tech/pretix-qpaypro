@@ -195,7 +195,6 @@ class QPayProMethod(QPayProSettingsHolder):
             'cc_number': mask_cc_number(request.session[key_prefix + 'cc_number']),
             'cc_exp_month': request.session[key_prefix + 'cc_exp_month'],
             'cc_exp_year': request.session[key_prefix + 'cc_exp_year'],
-            'cc_cvv2': request.session[key_prefix + 'cc_cvv2'],
             'cc_name': request.session[key_prefix + 'cc_name'],
         }
         return template.render(ctx)
