@@ -6,18 +6,11 @@
 <head>
     <title>{{ settings.PRETIX_INSTANCE_NAME }}</title>
     {% compress css %}
-        <link rel="stylesheet" type="text/x-scss" href="{% static "pretixbase/scss/cachedfiles.scss" %}"/>
+        <link rel="stylesheet" type="text/x-scss" href="{% static "pretixpresale/scss/main.scss" %}"/>
     {% endcompress %}
     {% compress js %}
         <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>
     {% endcompress %}
-
-    <!-- The next page will be open until all the items in this page are loaded  -->
-    <script>
-        $(window).bind("load", function() {
-            window.location = '{{ url_next|escapejs }}';
-        });
-    </script>
 
     <!-- DEVICE FINGERPRINT CODE -->
     <script src="{{ url_script }}" type="application/javascript"></script>
@@ -27,23 +20,32 @@
     </noscript>
     <!-- END DEVICE FINGERPRINT CODE -->
 </head>
-<body>
-    <div class="container">
-        <img src="{% static "pretixbase/img/pretix-logo.svg" %}"/>
-        <br /><br />
-        <h1>{% trans "Device Fingerprint" %}</h1>
-        <p>
-            {% trans "We're generating a device fingerprint, this is a fraud analysis tool that help us to confirm you're a valid customer." %}
-        </p>
-        <br />
-        <p>
-            {% trans "This page should be automatically closed after 10 seconds, if not, click the below link." %}
-        </p>
-        <p>
-            <a href="{{ url_next }}">
-                {% trans "Go to next step" %}
-            </a>
-        </p>
+<body class="loading">
+    <div id="loadingmodal">
+        <div class="modal-card">
+            <div class="modal-card-icon">
+                <i class="fa fa-cog big-rotating-icon"></i>
+            </div>
+            <div class="modal-card-content">
+                <h3>{% trans "Device Fingerprint" %}</h3>
+                <p class="text"></p>
+                <p class="status">{% trans "We're generating a device fingerprint, this is a fraud analysis tool that help us to confirm you're a valid customer." %}</p>
+                <p class="status"> {% trans "This page should be automatically closed after 10 seconds." %}
+                <a href="{{ url_next }}">{% trans "If not, click here" %}</a></p>
+            </div>
+        </div>
     </div>
+    
+    <!-- After the window is loaded we need to wait 10 seconds 
+    or the fingerprint to be generated -->
+    <script>
+        $(window).bind("load", function() {
+            setTimeout(
+                function() {
+                    window.location = '{{ url_next|escapejs }}';
+                }, 10000
+            );
+        });
+    </script>
 </body>
 </html>
