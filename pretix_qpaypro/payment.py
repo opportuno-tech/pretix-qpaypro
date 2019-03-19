@@ -45,7 +45,11 @@ class QPayProSettingsHolder(BasePaymentProvider):
                 and self.settings.general_x_private_key 
                 and self.settings.general_x_api_secret 
                 and self.settings.general_x_endpoint
-                and self.settings.general_x_org_id)
+                and self.settings.general_x_org_id
+                and self.settings.general_x_country
+                and self.settings.general_x_state
+                and self.settings.general_x_city
+                and self.settings.general_x_address)
 
     @property
     def settings_form_fields(self):
@@ -105,9 +109,8 @@ class QPayProMethod(QPayProSettingsHolder):
     # def payment_partial_refund_supported(self, payment: OrderPayment) -> bool:
     #     return self.refunds_allowed
 
-
-    def checkout_prepare(self, request, cart):
-        if not super().checkout_prepare(request, cart):
+    def _fingerprint_prepare(self, request, url_next):
+        if not super().checkout_prepare(request, None):
             return False
         
         # Device fingerprint session id
@@ -130,11 +133,6 @@ class QPayProMethod(QPayProSettingsHolder):
             params = params,
         )
 
-        # Checkout URL
-        url_next = eventreverse(self.event, 'presale:event.checkout', kwargs={
-            'step': 'confirm',
-        })
-
         # Final URL using the result of all the previous steps
         signer = signing.Signer(salt='safe-redirect')
         url_final = (
@@ -144,9 +142,20 @@ class QPayProMethod(QPayProSettingsHolder):
             'url_next=' + urllib.parse.quote(signer.sign(url_next))
         )
         return url_final
-        
+
     def payment_prepare(self, request, payment):
-        return self.checkout_prepare(request, None)
+        url_next = eventreverse(self.event, 'presale:event.order.pay.confirm', kwargs={
+            'order': payment.order.code,
+            'secret': payment.order.secret,
+            'payment': payment.pk
+        })
+        return self._fingerprint_prepare(request, url_next)
+
+    def checkout_prepare(self, request, cart):
+        url_next = eventreverse(self.event, 'presale:event.checkout', kwargs={
+            'step': 'confirm',
+        })
+        return self._fingerprint_prepare(request, url_next)
 
     def get_payment_key_prefix(self):
         return 'payment_{0}_'.format(self.identifier)
@@ -159,7 +168,8 @@ class QPayProMethod(QPayProSettingsHolder):
             request.session.get(key_prefix + 'cc_exp_month', '') != '' and
             request.session.get(key_prefix + 'cc_exp_year', '') != '' and
             request.session.get(key_prefix + 'cc_cvv2', '') != '' and
-            request.session.get(key_prefix + 'cc_name', '') != '' and
+            request.session.get(key_prefix + 'cc_first_name', '') != '' and
+            request.session.get(key_prefix + 'cc_last_name', '') != '' and
             request.session.get(key_prefix + 'session_onlinemetrix', '') != ''
         )
 
@@ -195,7 +205,8 @@ class QPayProMethod(QPayProSettingsHolder):
             'cc_number': mask_cc_number(request.session[key_prefix + 'cc_number']),
             'cc_exp_month': request.session[key_prefix + 'cc_exp_month'],
             'cc_exp_year': request.session[key_prefix + 'cc_exp_year'],
-            'cc_name': request.session[key_prefix + 'cc_name'],
+            'cc_first_name': request.session[key_prefix + 'cc_first_name'],
+            'cc_last_name': request.session[key_prefix + 'cc_last_name'],
         }
         return template.render(ctx)
 
@@ -302,36 +313,48 @@ class QPayProMethod(QPayProSettingsHolder):
 
     def _get_payment_body(self, request: HttpRequest, payment: OrderPayment):
         key_prefix = self.get_payment_key_prefix()
+
+        # Get a complete list of the cart contents
+        x_line_item = ''
+        for line in payment.order.positions.all():
+            x_line_item += '{description}<|>{code}<|>{quantity}<|>{value}<|>'.format(
+                description = line.item.name, 
+                code = line.item.name,
+                quantity = '1',
+                value = line.price,
+            )
+
+        # Get the order page for relay URL
+        x_relay_url = build_absolute_uri(self.event, 'presale:event.order', kwargs={
+            'order': payment.order.code,
+            'secret': payment.order.secret
+        }) + '?paid=yes'
+
+        # Generate all the transaction body
         b = {
             'x_login': self.get_settings_key('x_login'),
             'x_private_key': self.get_settings_key('x_private_key'),
             'x_api_secret': self.get_settings_key('x_api_secret'),
-            'x_description': 'Order {}-{}'.format(self.event.slug.upper(), payment.full_id),
+            'x_description': 'Order {} - {}'.format(self.event.slug.upper(), payment.full_id),
             'x_amount': str(payment.amount),
-            'x_freight': '',
             'x_currency_code': self.event.currency,
             'x_product_id': payment.order.code,
             'x_audit_number': payment.order.code,
-            'x_line_item': '{description}<|>{code}<|>{quantity}<|>{value}<|>'.format(
-                description = self.event.slug.upper(), 
-                code = payment.order.code,
-                quantity = '1',
-                value = str(payment.amount)
-            ),
-            'x_email': 'alvaro.ruano90@yahoo.com',
+            'x_line_item': x_line_item,
+            'x_email': payment.order.email,
             'x_fp_sequence': payment.order.code,
             'x_fp_timestamp': str(datetime.now()),
             'x_invoice_num': payment.order.code,
-            'x_first_name': 'Alvaro',
-            'x_last_name': 'Ruano',
+            'x_first_name': request.session.get(key_prefix + 'cc_first_name', ''),
+            'x_last_name': request.session.get(key_prefix + 'cc_last_name', ''),
             'x_company': 'C/F',
-            'x_address': 'Ciudad',
-            'x_city': 'Guatemala',
-            'x_state': 'Guatemala',
-            'x_zip': '01057',
-            'x_country': 'Guatemala',
+            'x_address': self.get_settings_key('x_address'),
+            'x_city': self.get_settings_key('x_city'),
+            'x_state': self.get_settings_key('x_state'),
+            'x_zip': self.get_settings_key('x_zip'),
+            'x_country': self.get_settings_key('x_country'),
             'x_relay_response': 'TRUE',
-            'x_relay_url': 'https://midominio.com/success',
+            'x_relay_url': x_relay_url,
             'x_type': 'AUTH_ONLY',
             'x_method': 'CC',
             'visaencuotas': 0,
@@ -341,7 +364,10 @@ class QPayProMethod(QPayProSettingsHolder):
                 str(request.session.get(key_prefix + 'cc_exp_year', ''))[-2:]
             ),
             'cc_cvv2': request.session.get(key_prefix + 'cc_cvv2', ''),
-            'cc_name': request.session.get(key_prefix + 'cc_name', ''),
+            'cc_name': '{} {}'.format(
+                request.session.get(key_prefix + 'cc_first_name', ''),
+                request.session.get(key_prefix + 'cc_last_name', ''),
+            ),
             'cc_type': request.session.get(key_prefix + 'cc_type', ''),
             'device_fingerprint_id': request.session.get(key_prefix + 'session_onlinemetrix', ''),
         }
@@ -356,10 +382,22 @@ class QPayProMethod(QPayProSettingsHolder):
             else:
                 url = 'https://sandbox.qpaypro.com/payment/api_v1'
             
+
+            # Get the message body
+            payment_body = self._get_payment_body(request, payment)
+
+            # # To save the information befor send
+            # # TO DO: to delete this action because of security issues
+            # payment.order.log_action('pretix.event.order.payment.started', {
+            #     'local_id': payment.local_id,
+            #     'provider': payment.provider,
+            #     'data': payment_body
+            # })
+            
             # Perform the call to the endpoint
             req = requests.post(
                 url,
-                json=self._get_payment_body(request, payment),
+                json = payment_body,
             )
             req.raise_for_status()
 

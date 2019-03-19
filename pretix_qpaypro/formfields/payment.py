@@ -51,9 +51,16 @@ def get_payment_form_fields():
                 min_value=100,
                 help_text=_('3 or 4 digits code usually found in the back of the card.'),
             )),
-        ('cc_name',
+        ('cc_first_name',
             forms.CharField(
-                label=_('Cardholder\'s Name'),
+                label=_('Cardholder\'s First Name'),
+                required=True,
+                max_length=50,
+                help_text=_('Exactly as appears in the card.'),
+            )),
+        ('cc_last_name',
+            forms.CharField(
+                label=_('Cardholder\'s Last Name'),
                 required=True,
                 max_length=50,
                 help_text=_('Exactly as appears in the card.'),

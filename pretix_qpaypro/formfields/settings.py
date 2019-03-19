@@ -61,4 +61,39 @@ def get_settings_form_fields(prefix, required):
                     docs_url='https://qpaypro.zendesk.com/hc/es/articles/115002159651-Device-Fingerprint'
                 ),
             )),
+        (('{prefix}x_country').format(
+                prefix=prefix
+            ),
+            forms.CharField(
+                label=_('QPayPro: Default Country'),
+                required=required,
+            )),
+        (('{prefix}x_state').format(
+                prefix=prefix
+            ),
+            forms.CharField(
+                label=_('QPayPro: Default State'),
+                required=required,
+            )),
+        (('{prefix}x_city').format(
+                prefix=prefix
+            ),
+            forms.CharField(
+                label=_('QPayPro: Default City'),
+                required=required,
+            )),
+        (('{prefix}x_zip').format(
+                prefix=prefix
+            ),
+            forms.CharField(
+                label=_('QPayPro: Default Zip Code'),
+                required=False,
+            )),
+        (('{prefix}x_address').format(
+                prefix=prefix
+            ),
+            forms.CharField(
+                label=_('QPayPro: Default Address'),
+                required=required,
+            )),
     ]
