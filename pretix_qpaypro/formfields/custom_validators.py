@@ -86,8 +86,9 @@ class CreditCardField(forms.CharField):
             # override default widget
             widget=TelephoneInput(attrs={
                 'placeholder': placeholder
-            })
-        , *args, **kwargs)
+            }),
+            *args, **kwargs
+        )
 
     default_error_messages = {
         'invalid': _(u'The credit card number is invalid'),

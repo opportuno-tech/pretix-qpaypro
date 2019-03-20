@@ -1,29 +1,26 @@
-import hashlib
-import json
 import logging
 import urllib.parse
 from collections import OrderedDict
-from datetime import timedelta, datetime
+from datetime import datetime
 
 import requests
 from django import forms
 from django.core import signing
 from django.http import HttpRequest
 from django.template.loader import get_template
-from django.urls import reverse
 from django.utils.crypto import get_random_string
-from django.utils.http import urlquote
-from django.utils.translation import pgettext, ugettext_lazy as _
-from pretix.base.models import Event, OrderPayment, OrderRefund, Quota
+from django.utils.translation import ugettext_lazy as _
+from pretix.base.models import Event, OrderPayment, Quota
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.settings import SettingsSandbox
-from pretix.helpers.urls import build_absolute_uri as build_global_uri
-from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
+from pretix.helpers.urls import build_absolute_uri
+from pretix.multidomain.urlreverse import eventreverse
 from requests import HTTPError
 
-from .formfields.settings import get_settings_form_fields
-from .formfields.payment import get_payment_form_fields
 from .formfields.custom_validators import mask_cc_number
+from .formfields.payment import get_payment_form_fields
+from .formfields.settings import get_settings_form_fields
+
 
 logger = logging.getLogger(__name__)
 
@@ -41,15 +38,15 @@ class QPayProSettingsHolder(BasePaymentProvider):
 
     @property
     def were_general_settings_provided(self):
-        return bool(self.settings.general_x_login 
-                and self.settings.general_x_private_key 
-                and self.settings.general_x_api_secret 
-                and self.settings.general_x_endpoint
-                and self.settings.general_x_org_id
-                and self.settings.general_x_country
-                and self.settings.general_x_state
-                and self.settings.general_x_city
-                and self.settings.general_x_address)
+        return bool(self.settings.general_x_login
+                    and self.settings.general_x_private_key
+                    and self.settings.general_x_api_secret
+                    and self.settings.general_x_endpoint
+                    and self.settings.general_x_org_id
+                    and self.settings.general_x_country
+                    and self.settings.general_x_state
+                    and self.settings.general_x_city
+                    and self.settings.general_x_address)
 
     @property
     def settings_form_fields(self):
@@ -80,7 +77,6 @@ class QPayProSettingsHolder(BasePaymentProvider):
         return self.settings.get(key)
 
 
-
 class QPayProMethod(QPayProSettingsHolder):
     method = ''
     abort_pending_allowed = False
@@ -100,46 +96,42 @@ class QPayProMethod(QPayProSettingsHolder):
 
     @property
     def is_enabled(self) -> bool:
-        return self.settings.get('_enabled', as_type=bool) and self.settings.get('method_{}'.format(self.method),
-                                                                                 as_type=bool)
-
-    # def payment_refund_supported(self, payment: OrderPayment) -> bool:
-    #     return self.refunds_allowed
-
-    # def payment_partial_refund_supported(self, payment: OrderPayment) -> bool:
-    #     return self.refunds_allowed
+        return (
+            self.settings.get('_enabled', as_type=bool)
+            and self.settings.get('method_{}'.format(self.method), as_type=bool)
+        )
 
     def _fingerprint_prepare(self, request, url_next):
         if not super().checkout_prepare(request, None):
             return False
-        
+
         # Device fingerprint session id
         session_onlinemetrix_key = self.get_payment_key_prefix() + 'session_onlinemetrix'
         if not request.session.get(session_onlinemetrix_key, False):
             request.session[session_onlinemetrix_key] = get_random_string(32)
-        
+
         # Device fingerprint URLs
         params = 'org_id={x_org_id}&session_id={x_login}{session_id}'.format(
-            x_org_id = self.get_settings_key('x_org_id'),
-            x_login = self.get_settings_key('x_login'),
-            session_id = request.session.get(session_onlinemetrix_key, '')
+            x_org_id=self.get_settings_key('x_org_id'),
+            x_login=self.get_settings_key('x_login'),
+            session_id=request.session.get(session_onlinemetrix_key, '')
         )
         url_script = '{url}/fp/tags.js?{params}'.format(
-            url = self.url_onlinemetrix, 
-            params = params,
+            url=self.url_onlinemetrix,
+            params=params,
         )
         url_iframe = '{url}/fp/tags?{params}'.format(
-            url = self.url_onlinemetrix, 
-            params = params,
+            url=self.url_onlinemetrix,
+            params=params,
         )
 
         # Final URL using the result of all the previous steps
         signer = signing.Signer(salt='safe-redirect')
         url_final = (
-            eventreverse(self.event, 'plugins:pretix_qpaypro:onlinemetrix') + '?' + 
-            'url_script=' + urllib.parse.quote(signer.sign(url_script)) + '&'
-            'url_iframe=' + urllib.parse.quote(signer.sign(url_iframe)) + '&'
-            'url_next=' + urllib.parse.quote(signer.sign(url_next))
+            eventreverse(self.event, 'plugins:pretix_qpaypro:onlinemetrix') + '?'
+            + 'url_script=' + urllib.parse.quote(signer.sign(url_script)) + '&'
+            + 'url_iframe=' + urllib.parse.quote(signer.sign(url_iframe)) + '&'
+            + 'url_next=' + urllib.parse.quote(signer.sign(url_next))
         )
         return url_final
 
@@ -163,24 +155,15 @@ class QPayProMethod(QPayProSettingsHolder):
     def payment_is_valid_session(self, request: HttpRequest):
         key_prefix = self.get_payment_key_prefix()
         return (
-            request.session.get(key_prefix + 'cc_type', '') != '' and
-            request.session.get(key_prefix + 'cc_number', '') != '' and
-            request.session.get(key_prefix + 'cc_exp_month', '') != '' and
-            request.session.get(key_prefix + 'cc_exp_year', '') != '' and
-            request.session.get(key_prefix + 'cc_cvv2', '') != '' and
-            request.session.get(key_prefix + 'cc_first_name', '') != '' and
-            request.session.get(key_prefix + 'cc_last_name', '') != '' and
-            request.session.get(key_prefix + 'session_onlinemetrix', '') != ''
+            request.session.get(key_prefix + 'cc_type', '') != ''
+            and request.session.get(key_prefix + 'cc_number', '') != ''
+            and request.session.get(key_prefix + 'cc_exp_month', '') != ''
+            and request.session.get(key_prefix + 'cc_exp_year', '') != ''
+            and request.session.get(key_prefix + 'cc_cvv2', '') != ''
+            and request.session.get(key_prefix + 'cc_first_name', '') != ''
+            and request.session.get(key_prefix + 'cc_last_name', '') != ''
+            and request.session.get(key_prefix + 'session_onlinemetrix', '') != ''
         )
-
-    # @property
-    # def request_headers(self):
-    #     headers = {}
-    #     if self.settings.connect_client_id and self.settings.access_token:
-    #         headers['Authorization'] = 'Bearer %s' % self.settings.access_token
-    #     else:
-    #         headers['Authorization'] = 'Bearer %s' % self.settings.api_key
-    #     return headers
 
     @property
     def payment_form_fields(self):
@@ -197,7 +180,7 @@ class QPayProMethod(QPayProSettingsHolder):
         template = get_template('pretix_qpaypro/checkout_payment_confirm.html')
         key_prefix = self.get_payment_key_prefix()
         ctx = {
-            'request': request, 
+            'request': request,
             'event': self.event,
             'settings': self.settings,
             'provider': self,
@@ -210,107 +193,6 @@ class QPayProMethod(QPayProSettingsHolder):
         }
         return template.render(ctx)
 
-    # def payment_can_retry(self, payment):
-    #     return self._is_still_available(order=payment.order)
-
-    # def payment_pending_render(self, request, payment) -> str:
-    #     if payment.info:
-    #         payment_info = json.loads(payment.info)
-    #     else:
-    #         payment_info = None
-    #     template = get_template('pretix_qpaypro/pending.html')
-    #     ctx = {
-    #         'request': request,
-    #         'event': self.event,
-    #         'settings': self.settings,
-    #         'provider': self,
-    #         'order': payment.order,
-    #         'payment': payment,
-    #         'payment_info': payment_info,
-    #     }
-    #     return template.render(ctx)
-
-    # def payment_control_render(self, request, payment) -> str:
-    #     if payment.info:
-    #         payment_info = json.loads(payment.info)
-    #     else:
-    #         payment_info = None
-    #     template = get_template('pretix_qpaypro/control.html')
-    #     ctx = {
-    #         'request': request,
-    #         'event': self.event,
-    #         'settings': self.settings,
-    #         'payment_info': payment_info,
-    #         'payment': payment,
-    #         'method': self.method,
-    #         'provider': self,
-    #     }
-    #     return template.render(ctx)
-
-    # def execute_refund(self, refund: OrderRefund):
-    #     payment = refund.payment.info_data.get('id')
-    #     body = {
-    #         'amount': {
-    #             'currency': self.event.currency,
-    #             'value': str(refund.amount)
-    #         },
-    #     }
-    #     if self.settings.connect_client_id and self.settings.access_token:
-    #         body['testmode'] = self.settings.endpoint == 'test'
-    #     try:
-    #         print(self.request_headers, body)
-    #         req = requests.post(
-    #             'https://api.qpaypro.com/v2/payments/{}/refunds'.format(payment),
-    #             json=body,
-    #             headers=self.request_headers
-    #         )
-    #         req.raise_for_status()
-    #         req.json()
-    #     except HTTPError:
-    #         logger.exception('QPayPro error: %s' % req.text)
-    #         try:
-    #             refund.info_data = req.json()
-    #         except:
-    #             refund.info_data = {
-    #                 'error': True,
-    #                 'detail': req.text
-    #             }
-    #         raise PaymentException(_('QPayPro reported an error: {}').format(refund.info_data.get('detail')))
-    #     else:
-    #         refund.done()
-
-    # def get_locale(self, language):
-    #     pretix_to_qpaypro_locales = {
-    #         'en': 'en_US',
-    #         'nl': 'nl_NL',
-    #         'nl_BE': 'nl_BE',
-    #         'fr': 'fr_FR',
-    #         'de': 'de_DE',
-    #         'es': 'es_ES',
-    #         'ca': 'ca_ES',
-    #         'pt': 'pt_PT',
-    #         'it': 'it_IT',
-    #         'nb': 'nb_NO',
-    #         'sv': 'sv_SE',
-    #         'fi': 'fi_FI',
-    #         'da': 'da_DK',
-    #         'is': 'is_IS',
-    #         'hu': 'hu_HU',
-    #         'pl': 'pl_PL',
-    #         'lv': 'lv_LV',
-    #         'lt': 'lt_LT'
-    #     }
-    #     return pretix_to_qpaypro_locales.get(
-    #         language,
-    #         pretix_to_qpaypro_locales.get(
-    #             language.split('-')[0],
-    #             pretix_to_qpaypro_locales.get(
-    #                 language.split('_')[0],
-    #                 'en'
-    #             )
-    #         )
-    #     )
-
     def _get_payment_body(self, request: HttpRequest, payment: OrderPayment):
         key_prefix = self.get_payment_key_prefix()
 
@@ -318,10 +200,10 @@ class QPayProMethod(QPayProSettingsHolder):
         x_line_item = ''
         for line in payment.order.positions.all():
             x_line_item += '{description}<|>{code}<|>{quantity}<|>{value}<|>'.format(
-                description = line.item.name, 
-                code = line.item.name,
-                quantity = '1',
-                value = line.price,
+                description=line.item.name,
+                code=line.item.name,
+                quantity='1',
+                value=line.price,
             )
 
         # Get the order page for relay URL
@@ -381,7 +263,6 @@ class QPayProMethod(QPayProSettingsHolder):
                 url = 'https://payments.qpaypro.com/checkout/api_v1'
             else:
                 url = 'https://sandbox.qpaypro.com/payment/api_v1'
-            
 
             # Get the message body
             payment_body = self._get_payment_body(request, payment)
@@ -393,21 +274,21 @@ class QPayProMethod(QPayProSettingsHolder):
             #     'provider': payment.provider,
             #     'data': payment_body
             # })
-            
+
             # Perform the call to the endpoint
             req = requests.post(
                 url,
-                json = payment_body,
+                json=payment_body,
             )
             req.raise_for_status()
 
             # Load the response to be read
             data = req.json()
-            
+
             # The result is evaluated to determine the next step
             if not (data['result'] == 1 and data['responseCode'] == 100):
                 raise PaymentException(data['responseText'])
-            
+
             # To save the result
             payment.info = req.json()
             payment.confirm()
@@ -431,30 +312,6 @@ class QPayProMethod(QPayProSettingsHolder):
                                      'with us if this problem persists.'))
 
         return None
-
-    # def redirect(self, request, url):
-    #     if request.session.get('iframe_session', False):
-    #         signer = signing.Signer(salt='safe-redirect')
-    #         return (
-    #                 build_absolute_uri(request.event, 'plugins:pretix_qpaypro:redirect') + '?url=' +
-    #                 urllib.parse.quote(signer.sign(url))
-    #         )
-    #     else:
-    #         return str(url)
-
-    # def shred_payment_info(self, obj: OrderPayment):
-    #     if not obj.info:
-    #         return
-    #     d = json.loads(obj.info)
-    #     if 'details' in d:
-    #         d['details'] = {
-    #             k: '█' for k in d['details'].keys()
-    #             if k not in ('bitcoinAmount', )
-    #         }
-
-    #     d['_shredded'] = True
-    #     obj.info = json.dumps(d)
-    #     obj.save(update_fields=['info'])
 
 
 class QPayProCC(QPayProMethod):
