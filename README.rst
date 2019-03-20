@@ -7,9 +7,6 @@ QPayPro payment integration for pretix
 .. image:: https://travis-ci.org/aruanoguate/pretix-qpaypro.svg?branch=master
     :target: https://travis-ci.org/aruanoguate/pretix-qpaypro
 
-.. image:: https://gitlab.com/aruanoguate/pretix-qpaypro/badges/master/pipeline.svg
-   :target: https://gitlab.com/aruanoguate/pretix-qpaypro/commits/master
-
 
 This is a plugin for `pretix`_ to be able to use the `qpaypro`_ payments provider. 
 
