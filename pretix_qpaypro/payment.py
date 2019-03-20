@@ -13,8 +13,7 @@ from django.utils.translation import ugettext_lazy as _
 from pretix.base.models import Event, OrderPayment, Quota
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.settings import SettingsSandbox
-from pretix.helpers.urls import build_absolute_uri
-from pretix.multidomain.urlreverse import eventreverse
+from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from requests import HTTPError
 
 from .formfields.custom_validators import mask_cc_number
