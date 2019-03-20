@@ -25,7 +25,7 @@ cmdclass = {
 
 setup(
     name='pretix-qpaypro',
-    version='1.0.5',
+    version='1.0.7',
     description='Integration for the QPayPro payment provider.',
     long_description=long_description,
     long_description_content_type='text/x-rst',
