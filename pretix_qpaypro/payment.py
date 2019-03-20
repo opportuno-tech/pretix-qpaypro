@@ -21,7 +21,6 @@ from .formfields.custom_validators import mask_cc_number
 from .formfields.payment import get_payment_form_fields
 from .formfields.settings import get_settings_form_fields
 
-
 logger = logging.getLogger(__name__)
 
 

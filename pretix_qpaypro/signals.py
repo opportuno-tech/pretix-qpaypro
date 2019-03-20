@@ -3,7 +3,9 @@ from collections import OrderedDict
 
 from django.dispatch import receiver
 from pretix.base.settings import settings_hierarkey
-from pretix.base.signals import register_global_settings, register_payment_providers
+from pretix.base.signals import (
+    register_global_settings, register_payment_providers,
+)
 
 from .formfields.settings import get_settings_form_fields
 
