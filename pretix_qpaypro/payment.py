@@ -294,7 +294,7 @@ class QPayProMethod(QPayProSettingsHolder):
             logger.exception('QPayPro error: %s' % req.text)
             try:
                 payment.info_data = req.json()
-            except:
+            except Exception:
                 payment.info_data = {
                     'error': True,
                     'detail': req.text
