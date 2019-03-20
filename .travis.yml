@@ -1,25 +1,32 @@
 language: python
 sudo: false
 python:
-    - "3.6"
+- '3.6'
 install:
-    - pip install -U pip wheel setuptools
-    - pushd ~
-    - git clone --depth 1 https://github.com/pretix/pretix.git
-    - cd pretix/src
-    - pip3 install -Ur requirements.txt -r requirements/dev.txt
-    - python setup.py develop
-    - make all compress
-    - popd
+- pip install -U pip wheel setuptools
+- pushd ~
+- git clone --depth 1 https://github.com/pretix/pretix.git
+- cd pretix/src
+- pip3 install -Ur requirements.txt -r requirements/dev.txt
+- python setup.py develop
+- make all compress
+- popd
 script:
-    - flake8 .
-    - isort -c -rc .
+- flake8 .
+- isort -c -rc .
 cache:
-    directories:
-        - $HOME/.cache/pip
+  directories:
+  - "$HOME/.cache/pip"
 addons:
-    apt:
-        packages:
-            - enchant
-            - myspell-de-de
-            - aspell-en
+  apt:
+    packages:
+    - enchant
+    - myspell-de-de
+    - aspell-en
+deploy:
+  provider: pypi
+  user: "aruanoguate"
+  password:
+    secure: T2bJonkebCsI7Ae1TeWjQjqcFw/vkC6Cc8RPh3yiLDpZDrPfAt4W+qJf/nEXVhcJrElzCAmFDxdLxnxitPv506oYjSP+XQ6xKNhFANklCpvJqW7FmbmtPhqFJOXRNok66WarcRHWjb+NrEY3gLWw2rDuHg3XsZVr28xf0bfuxrVSQTeTovovpDzkxEXnjlyoErceAxVTLgFK6OZkiJs14my/YVI6ZC5vdhE8BLTCsD6M9kNv1YoTvzWeFj7VCLQE7KrckzCHg5xsOLO7HjFIMRTUQmdHL2uJQUVoXiDliAHL51vc08pikPh5obL1N6/EEgbabN09tK2u6cpTdwl2DQtomXA0Y1BdlYQ79vH36lXaX7kIrVY/Nde0avUfwS/mLlFNTzrB8gxfnMDnQ4tF/PARaIDaQ+xsqWLFjOcEFnISAImgFAJa5X1fAGhADApPv80ESwgXvmpX61Jw/m2/yjG9ofV/WhIzV86Cad9/99oWtk/IV9Za+H1jiWllWLnXFvX/55bk1lY/A4jNElGyoT976/VJWLFlgRbnNjxzvanCRhA06xhKR6hjQNAiqYx5z9JziGNclLzUwy7jkcm56EKo4Q3P5dD4lqdN/Y/sKcIRs0vT1KvfK1xVX6y+aG+729Ixq2T0Gu3zIsDE1PiuRVGXqKGlzb6dQU2mzEDIvAU=
+  on:
+    tags: true
