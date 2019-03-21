@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-21 01:15+0000\n"
+"POT-Creation-Date: 2019-03-21 01:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -36,6 +36,14 @@ msgstr ""
 #| msgid "Card type"
 msgid "Card Type"
 msgstr "Tipo de tarjeta"
+
+#: pretix_qpaypro/formfields/payment.py:20
+msgid "Visa"
+msgstr ""
+
+#: pretix_qpaypro/formfields/payment.py:21
+msgid "Mastercard"
+msgstr ""
 
 #: pretix_qpaypro/formfields/payment.py:28
 #: pretix_qpaypro/templates/pretix_qpaypro/checkout_payment_confirm.html:13
@@ -113,6 +121,14 @@ msgstr "Conectar con QPayPro: Cliente secreto"
 #| msgid "QPayPro account"
 msgid "QPayPro: Endpoint"
 msgstr "Cuenta de QPayPro"
+
+#: pretix_qpaypro/formfields/settings.py:53
+msgid "Sandbox"
+msgstr ""
+
+#: pretix_qpaypro/formfields/settings.py:54
+msgid "Live"
+msgstr ""
 
 #: pretix_qpaypro/formfields/settings.py:63
 #, fuzzy

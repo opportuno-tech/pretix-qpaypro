@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-21 01:15+0000\n"
+"POT-Creation-Date: 2019-03-21 01:22+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,6 +32,14 @@ msgstr ""
 #: pretix_qpaypro/formfields/payment.py:16
 #: pretix_qpaypro/templates/pretix_qpaypro/checkout_payment_confirm.html:9
 msgid "Card Type"
+msgstr ""
+
+#: pretix_qpaypro/formfields/payment.py:20
+msgid "Visa"
+msgstr ""
+
+#: pretix_qpaypro/formfields/payment.py:21
+msgid "Mastercard"
 msgstr ""
 
 #: pretix_qpaypro/formfields/payment.py:28
@@ -99,6 +107,14 @@ msgstr ""
 
 #: pretix_qpaypro/formfields/settings.py:49
 msgid "QPayPro: Endpoint"
+msgstr ""
+
+#: pretix_qpaypro/formfields/settings.py:53
+msgid "Sandbox"
+msgstr ""
+
+#: pretix_qpaypro/formfields/settings.py:54
+msgid "Live"
 msgstr ""
 
 #: pretix_qpaypro/formfields/settings.py:63

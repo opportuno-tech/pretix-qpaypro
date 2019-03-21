@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-21 01:15+0000\n"
+"POT-Creation-Date: 2019-03-21 01:22+0000\n"
 "PO-Revision-Date: 2019-01-09 23:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -37,6 +37,16 @@ msgstr ""
 #| msgid "Card type"
 msgid "Card Type"
 msgstr "Kaarttype"
+
+#: pretix_qpaypro/formfields/payment.py:20
+msgid "Visa"
+msgstr ""
+
+#: pretix_qpaypro/formfields/payment.py:21
+#, fuzzy
+#| msgid "paysafecard"
+msgid "Mastercard"
+msgstr "paysafecard"
 
 #: pretix_qpaypro/formfields/payment.py:28
 #: pretix_qpaypro/templates/pretix_qpaypro/checkout_payment_confirm.html:13
@@ -116,6 +126,17 @@ msgstr "QPayPro Connect: Clientgeheim"
 #| msgid "QPayPro account"
 msgid "QPayPro: Endpoint"
 msgstr "QPayPro-account"
+
+#: pretix_qpaypro/formfields/settings.py:53
+msgid "Sandbox"
+msgstr ""
+
+#: pretix_qpaypro/formfields/settings.py:54
+#, fuzzy
+#| msgctxt "QPayPro"
+#| msgid "Live"
+msgid "Live"
+msgstr "Live"
 
 #: pretix_qpaypro/formfields/settings.py:63
 #, fuzzy
@@ -268,10 +289,6 @@ msgstr ""
 #~ msgstr "Endpoint"
 
 #~ msgctxt "QPayPro"
-#~ msgid "Live"
-#~ msgstr "Live"
-
-#~ msgctxt "QPayPro"
 #~ msgid "Testing"
 #~ msgstr "Testing"
 
@@ -304,9 +321,6 @@ msgstr ""
 
 #~ msgid "KBC/CBC Payment Button"
 #~ msgstr "KBC/CBC-Betaalknop"
-
-#~ msgid "paysafecard"
-#~ msgstr "paysafecard"
 
 #~ msgid "Sofort"
 #~ msgstr "Sofort-betaling"
