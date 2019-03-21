@@ -61,7 +61,7 @@ class QPayProSettingsHolder(BasePaymentProvider):
                  )),
                 ('method_visaencuotas',
                  forms.BooleanField(
-                     label=_('Visa en cuotas'),
+                     label=_('Monthly payments'),
                      required=False,
                  )),
             ] + list(super().settings_form_fields.items())
@@ -320,5 +320,5 @@ class QPayProCC(QPayProMethod):
 
 class QPayProVisaEnCuotas(QPayProMethod):
     method = 'visaencuotas'
-    verbose_name = _('Visa en cuotas via QPayPro')
-    public_name = _('Visa en cuotas')
+    verbose_name = _('Monthly payments via QPayPro')
+    public_name = _('Monthly payments')
