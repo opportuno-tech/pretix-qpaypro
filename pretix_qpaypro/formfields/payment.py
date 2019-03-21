@@ -17,8 +17,8 @@ def get_payment_form_fields():
                 required=True,
                 initial='visa',
                 choices=(
-                    ('visa', 'Visa'),
-                    ('mastercard', 'Mastercard'),
+                    ('visa', _('Visa')),
+                    ('mastercard', _('Mastercard')),
                 ),
             )
         ),

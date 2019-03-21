@@ -50,8 +50,8 @@ def get_settings_form_fields(prefix, required):
                 required=required,
                 initial='sandbox',
                 choices=(
-                    ('sandbox', 'Sandbox'),
-                    ('live', 'Live'),
+                    ('sandbox', _('Sandbox')),
+                    ('live', _('Live')),
                 ),
             )
         ),
