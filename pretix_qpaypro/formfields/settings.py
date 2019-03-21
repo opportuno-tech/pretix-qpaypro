@@ -11,7 +11,7 @@ def get_settings_form_fields(prefix, required):
             forms.CharField(
                 label=_('QPayPro: Login'),
                 required=required,
-                help_text=_('{text1} <a target="_blank" rel="noopener" href="{docs_url}">{text2}</a>').format(
+                help_text='{text1} <a target="_blank" rel="noopener" href="{docs_url}">{text2}</a>'.format(
                     text1=_('Also referred to as \"Public Key\".'),
                     text2=_('Click here to access the API information.'),
                     docs_url='https://qpaypro.zendesk.com/hc/es/articles/115001625892-Manual-de-integración-de-pago-QPayPro-via-API-V1-0'
