@@ -7,6 +7,10 @@ QPayPro payment integration for pretix
 .. image:: https://travis-ci.org/aruanoguate/pretix-qpaypro.svg?branch=master
     :target: https://travis-ci.org/aruanoguate/pretix-qpaypro
 
+.. image:: https://hosted.weblate.org/widgets/pretix-qpaypro/-/svg-badge.svg
+    :alt: Translation status
+    :target: https://hosted.weblate.org/engage/pretix-qpaypro/?utm_source=widget
+
 
 This is a plugin for `pretix`_ to be able to use the `qpaypro`_ payments provider. 
 
@@ -25,6 +29,16 @@ Development setup
 
 6. Restart your local pretix server. You can now use the plugin from this repository for your events by enabling it in
    the 'plugins' tab in the settings.
+
+
+Translations
+------------
+
+The language translations for this project are handled on Weblate.org, you can see the current status below.
+
+.. image:: https://hosted.weblate.org/widgets/pretix-qpaypro/-/multi-blue.svg
+    :alt: Translation status
+    :target: https://hosted.weblate.org/engage/pretix-qpaypro/?utm_source=widget
 
 
 License
