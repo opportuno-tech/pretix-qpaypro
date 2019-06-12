@@ -3,20 +3,21 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-21 01:22+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
+"PO-Revision-Date: 2019-06-12 08:10+0000\n"
+"Last-Translator: Alvaro Enrique Ruano <alvaro.ruano90@outlook.com>\n"
+"Language-Team: Spanish <https://hosted.weblate.org/projects/pretix-qpaypro/"
+"pretix-qpaypro/es/>\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 3.7-dev\n"
 
 #: pretix_qpaypro/__init__.py:10
 msgid "QPayPro payment integration for pretix"
@@ -28,7 +29,7 @@ msgstr "Integración para el proveedor de pagos de QPayPro"
 
 #: pretix_qpaypro/formfields/custom_validators.py:94
 msgid "The credit card number is invalid"
-msgstr ""
+msgstr "El número de la tarjeta de crédito no es válido"
 
 #: pretix_qpaypro/formfields/payment.py:16
 #: pretix_qpaypro/templates/pretix_qpaypro/checkout_payment_confirm.html:9
@@ -39,11 +40,11 @@ msgstr "Tipo de tarjeta"
 
 #: pretix_qpaypro/formfields/payment.py:20
 msgid "Visa"
-msgstr ""
+msgstr "Visa"
 
 #: pretix_qpaypro/formfields/payment.py:21
 msgid "Mastercard"
-msgstr ""
+msgstr "Mastercard"
 
 #: pretix_qpaypro/formfields/payment.py:28
 #: pretix_qpaypro/templates/pretix_qpaypro/checkout_payment_confirm.html:13
@@ -54,11 +55,11 @@ msgstr "Tarjeta de Crédito"
 
 #: pretix_qpaypro/formfields/payment.py:38
 msgid "Expiration Month"
-msgstr ""
+msgstr "Mes de expiración"
 
 #: pretix_qpaypro/formfields/payment.py:47
 msgid "Expiration Year"
-msgstr ""
+msgstr "Año de expiración"
 
 #: pretix_qpaypro/formfields/payment.py:51
 #, python-brace-format
