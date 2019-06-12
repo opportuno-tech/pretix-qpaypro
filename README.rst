@@ -40,9 +40,6 @@ The language translations for this project are handled on Weblate.org, you can s
     :alt: Translation status
     :target: https://hosted.weblate.org/engage/pretix-qpaypro/?utm_source=widget
 
-.. image:: https://hosted.weblate.org/widgets/pretix-qpaypro/-/287x66-white.png
-    :alt: Translation status
-    :target: https://hosted.weblate.org/engage/pretix-qpaypro/?utm_source=widget
 
 License
 -------
