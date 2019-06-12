@@ -34,7 +34,13 @@ Development setup
 Translations
 ------------
 
+The language translations for this project are handled on Weblate.org, you can see the current status below.
+
 .. image:: https://hosted.weblate.org/widgets/pretix-qpaypro/-/horizontal-blue.svg
+    :alt: Translation status
+    :target: https://hosted.weblate.org/engage/pretix-qpaypro/?utm_source=widget
+
+.. image:: https://hosted.weblate.org/widgets/pretix-qpaypro/-/287x66-white.png
     :alt: Translation status
     :target: https://hosted.weblate.org/engage/pretix-qpaypro/?utm_source=widget
 
