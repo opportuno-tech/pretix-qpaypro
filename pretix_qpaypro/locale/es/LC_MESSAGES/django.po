@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-21 01:22+0000\n"
-"PO-Revision-Date: 2019-06-12 08:10+0000\n"
-"Last-Translator: Alvaro Enrique Ruano <alvaro.ruano90@outlook.com>\n"
+"PO-Revision-Date: 2019-06-14 02:17+0000\n"
+"Last-Translator: oocf <oswaldocerna@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/pretix-qpaypro/"
 "pretix-qpaypro/es/>\n"
 "Language: es\n"
@@ -25,7 +25,7 @@ msgstr "Integración de pagos de QPayPro para pretix"
 
 #: pretix_qpaypro/__init__.py:12
 msgid "Integration for the QPayPro payment provider."
-msgstr "Integración para el proveedor de pagos de QPayPro"
+msgstr "Integración para el proveedor de pagos de QPayPro."
 
 #: pretix_qpaypro/formfields/custom_validators.py:94
 msgid "The credit card number is invalid"
@@ -33,8 +33,6 @@ msgstr "El número de la tarjeta de crédito no es válido"
 
 #: pretix_qpaypro/formfields/payment.py:16
 #: pretix_qpaypro/templates/pretix_qpaypro/checkout_payment_confirm.html:9
-#, fuzzy
-#| msgid "Card type"
 msgid "Card Type"
 msgstr "Tipo de tarjeta"
 
@@ -48,10 +46,8 @@ msgstr "Mastercard"
 
 #: pretix_qpaypro/formfields/payment.py:28
 #: pretix_qpaypro/templates/pretix_qpaypro/checkout_payment_confirm.html:13
-#, fuzzy
-#| msgid "Credit card"
 msgid "Credit Card Number"
-msgstr "Tarjeta de Crédito"
+msgstr "Número de Tarjeta de Crédito"
 
 #: pretix_qpaypro/formfields/payment.py:38
 msgid "Expiration Month"
@@ -64,110 +60,98 @@ msgstr "Año de expiración"
 #: pretix_qpaypro/formfields/payment.py:51
 #, python-brace-format
 msgid "The full year should be provided, for example {0}."
-msgstr ""
+msgstr "Se debe de proveer el año completo, por ejemplo {0}."
 
 #: pretix_qpaypro/formfields/payment.py:57
 msgid "CVV2"
-msgstr ""
+msgstr "CVV2"
 
 #: pretix_qpaypro/formfields/payment.py:61
 msgid "3 or 4 digits code usually found in the back of the card."
 msgstr ""
+"Código de 3 o 4 dígitos usualmente se encuentran en la parte trasera de la "
+"tarjeta."
 
 #: pretix_qpaypro/formfields/payment.py:67
 msgid "Cardholder's First Name"
-msgstr ""
+msgstr "Primer nombre del tarjetahabiente"
 
 #: pretix_qpaypro/formfields/payment.py:70
 #: pretix_qpaypro/formfields/payment.py:79
 msgid "Exactly as appears in the card."
-msgstr ""
+msgstr "Como aparece exactamente en la tarjeta."
 
 #: pretix_qpaypro/formfields/payment.py:76
-#, fuzzy
-#| msgid "Card holder"
 msgid "Cardholder's Last Name"
-msgstr "Nombre Tarjeta"
+msgstr "Apellido del tarjetahabiente"
 
 #: pretix_qpaypro/formfields/settings.py:12
-#, fuzzy
-#| msgid "QPayPro account"
 msgid "QPayPro: Login"
-msgstr "Cuenta de QPayPro"
+msgstr "QPayPro: Inicio de sesión"
 
 #: pretix_qpaypro/formfields/settings.py:15
 msgid "Also referred to as \"Public Key\"."
-msgstr ""
+msgstr "También conocido como \"Llave Pública\"."
 
 #: pretix_qpaypro/formfields/settings.py:16
 msgid "Click here to access the API information."
-msgstr ""
+msgstr "Haga clic aquí para acceder a la información del API."
 
 #: pretix_qpaypro/formfields/settings.py:26
 msgid "QPayPro: Private Key"
-msgstr ""
+msgstr "QPayPro: Clave Privada"
 
 #: pretix_qpaypro/formfields/settings.py:30
 msgid "Also referred to as \"API Key\"."
-msgstr ""
+msgstr "También conocido como \"Llave del API\"."
 
 #: pretix_qpaypro/formfields/settings.py:38
-#, fuzzy
-#| msgid "QPayPro Connect: Client secret"
 msgid "QPayPro: API Secret"
-msgstr "Conectar con QPayPro: Cliente secreto"
+msgstr "QPayPro: Clave secreta API"
 
 #: pretix_qpaypro/formfields/settings.py:49
-#, fuzzy
-#| msgid "QPayPro account"
 msgid "QPayPro: Endpoint"
-msgstr "Cuenta de QPayPro"
+msgstr "QPayPro: URL Endpoint"
 
 #: pretix_qpaypro/formfields/settings.py:53
 msgid "Sandbox"
-msgstr ""
+msgstr "Entorno de prueba"
 
 #: pretix_qpaypro/formfields/settings.py:54
 msgid "Live"
-msgstr ""
+msgstr "Producción"
 
 #: pretix_qpaypro/formfields/settings.py:63
-#, fuzzy
-#| msgid "QPayPro"
 msgid "QPayPro: Org ID"
-msgstr "QPayPro"
+msgstr "QPayPro: ID organización"
 
 #: pretix_qpaypro/formfields/settings.py:68
 msgid "Required to generate client device fingerprint."
-msgstr ""
+msgstr "Es requerido generar la huella del dispositivo del cliente."
 
 #: pretix_qpaypro/formfields/settings.py:69
 msgid "Click here to access the associated documentation."
-msgstr ""
+msgstr "Haga clic aquí para acceder a la documentación asociada."
 
 #: pretix_qpaypro/formfields/settings.py:79
-#, fuzzy
-#| msgid "QPayPro account"
 msgid "QPayPro: Default Country"
-msgstr "Cuenta de QPayPro"
+msgstr "QPayPro: País por defecto"
 
 #: pretix_qpaypro/formfields/settings.py:88
 msgid "QPayPro: Default State"
-msgstr ""
+msgstr "QPayPro: Estado por defecto"
 
 #: pretix_qpaypro/formfields/settings.py:97
-#, fuzzy
-#| msgid "QPayPro account"
 msgid "QPayPro: Default City"
-msgstr "Cuenta de QPayPro"
+msgstr "QPayPro: Ciudad por defecto"
 
 #: pretix_qpaypro/formfields/settings.py:106
 msgid "QPayPro: Default Zip Code"
-msgstr ""
+msgstr "QPayPro: código postal por defecto"
 
 #: pretix_qpaypro/formfields/settings.py:115
 msgid "QPayPro: Default Address"
-msgstr ""
+msgstr "QPayPro: Dirección por defecto"
 
 #: pretix_qpaypro/payment.py:28
 msgid "QPayPro"
@@ -179,7 +163,7 @@ msgstr "Tarjeta de Crédito"
 
 #: pretix_qpaypro/payment.py:64 pretix_qpaypro/payment.py:324
 msgid "Monthly payments"
-msgstr ""
+msgstr "Pagos mensuales"
 
 #: pretix_qpaypro/payment.py:309
 msgid ""
@@ -194,28 +178,20 @@ msgid "Credit card via QPayPro"
 msgstr "Tarjeta de crédito por QPayPro"
 
 #: pretix_qpaypro/payment.py:323
-#, fuzzy
-#| msgid "Credit card via QPayPro"
 msgid "Monthly payments via QPayPro"
-msgstr "Tarjeta de crédito por QPayPro"
+msgstr "Pagos mensuales por QPayPro"
 
 #: pretix_qpaypro/templates/pretix_qpaypro/checkout_payment_confirm.html:5
-#, fuzzy
-#| msgid "Payment method"
 msgid "Payment Method"
 msgstr "Método de pago"
 
 #: pretix_qpaypro/templates/pretix_qpaypro/checkout_payment_confirm.html:17
-#, fuzzy
-#| msgid "Expires at"
 msgid "Expiration"
 msgstr "Expira en"
 
 #: pretix_qpaypro/templates/pretix_qpaypro/checkout_payment_confirm.html:21
-#, fuzzy
-#| msgid "Card holder"
 msgid "Cardholder\\'s Name"
-msgstr "Nombre Tarjeta"
+msgstr "Nombre de la Tarjeta"
 
 #: pretix_qpaypro/templates/pretix_qpaypro/checkout_payment_form.html:7
 msgid ""
@@ -225,28 +201,36 @@ msgid ""
 "should take no more than 10 seconds, then you'll be redirected to the "
 "confirmation page."
 msgstr ""
+"Después de hacer cliclk <strong>A Continuar</strong> serás redirigido a otra "
+"pagina que generará una <strong>huella digital del dispositivo</strong>, "
+"esta es una herramienta de análisis de fraude que ayuda a confirmar que eres "
+"un cliente válido. Esto no debería de tomar mas de 10 segundos, luego serás "
+"redirigido a la página de confirmación."
 
 #: pretix_qpaypro/templates/pretix_qpaypro/onlinemetrix.html:30
 msgid "Device Fingerprint"
-msgstr ""
+msgstr "Huella digital del dispositivo"
 
 #: pretix_qpaypro/templates/pretix_qpaypro/onlinemetrix.html:32
 msgid ""
 "We're generating a device fingerprint, this is a fraud analysis tool that "
 "help us to confirm you're a valid customer."
 msgstr ""
+"Estamos generando una huella digital del dispositivo, esto es una "
+"herramienta de análisis de fraude que nos ayuda a confirmar que eres un "
+"cliente válido."
 
 #: pretix_qpaypro/templates/pretix_qpaypro/onlinemetrix.html:33
 msgid "This page should be automatically closed after 10 seconds."
-msgstr ""
+msgstr "La página se cerrará automáticamente después de 10 segundos."
 
 #: pretix_qpaypro/templates/pretix_qpaypro/onlinemetrix.html:34
 msgid "If not, click here"
-msgstr ""
+msgstr "Si no, haga clic aquí"
 
 #: pretix_qpaypro/views.py:19
 msgid "Invalid parameters"
-msgstr ""
+msgstr "Parámetros inválidos"
 
 #~ msgid "Connect with QPayPro"
 #~ msgstr "Conectar con QPayPro"
