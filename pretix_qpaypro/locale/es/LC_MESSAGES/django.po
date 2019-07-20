@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-03-21 01:22+0000\n"
-"PO-Revision-Date: 2019-06-14 02:17+0000\n"
-"Last-Translator: oocf <oswaldocerna@gmail.com>\n"
+"PO-Revision-Date: 2019-07-20 18:06+0000\n"
+"Last-Translator: Alvaro Enrique Ruano <alvaro.ruano90@outlook.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/pretix-qpaypro/"
 "pretix-qpaypro/es/>\n"
 "Language: es\n"
@@ -17,11 +17,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.7-dev\n"
+"X-Generator: Weblate 3.8-dev\n"
 
 #: pretix_qpaypro/__init__.py:10
 msgid "QPayPro payment integration for pretix"
-msgstr "Integración de pagos de QPayPro para pretix"
+msgstr "Integración de QPayPro para pretix"
 
 #: pretix_qpaypro/__init__.py:12
 msgid "Integration for the QPayPro payment provider."
@@ -29,12 +29,12 @@ msgstr "Integración para el proveedor de pagos de QPayPro."
 
 #: pretix_qpaypro/formfields/custom_validators.py:94
 msgid "The credit card number is invalid"
-msgstr "El número de la tarjeta de crédito no es válido"
+msgstr "El número de la tarjeta de crédito es inválido"
 
 #: pretix_qpaypro/formfields/payment.py:16
 #: pretix_qpaypro/templates/pretix_qpaypro/checkout_payment_confirm.html:9
 msgid "Card Type"
-msgstr "Tipo de tarjeta"
+msgstr "Tipo de Tarjeta"
 
 #: pretix_qpaypro/formfields/payment.py:20
 msgid "Visa"
@@ -51,11 +51,11 @@ msgstr "Número de Tarjeta de Crédito"
 
 #: pretix_qpaypro/formfields/payment.py:38
 msgid "Expiration Month"
-msgstr "Mes de expiración"
+msgstr "Mes de Expiración"
 
 #: pretix_qpaypro/formfields/payment.py:47
 msgid "Expiration Year"
-msgstr "Año de expiración"
+msgstr "Año de Expiración"
 
 #: pretix_qpaypro/formfields/payment.py:51
 #, python-brace-format
