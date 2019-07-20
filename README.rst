@@ -4,8 +4,8 @@ QPayPro payment integration for pretix
 .. image:: https://img.shields.io/pypi/v/pretix-qpaypro.svg
    :target: https://pypi.python.org/pypi/pretix-qpaypro
 
-.. image:: https://travis-ci.org/aruanoguate/pretix-qpaypro.svg?branch=master
-    :target: https://travis-ci.org/aruanoguate/pretix-qpaypro
+.. image:: https://travis-ci.org/opportuno-tech/pretix-qpaypro.svg?branch=master
+    :target: https://travis-ci.org/opportuno-tech/pretix-qpaypro
 
 .. image:: https://hosted.weblate.org/widgets/pretix-qpaypro/-/svg-badge.svg
     :alt: Translation status
@@ -44,7 +44,7 @@ The language translations for this project are handled on Weblate.org, you can s
 License
 -------
 
-Copyright 2019 Alvaro Enrique Ruano
+Copyright 2019 Opportuno Tech
 
 Released under the terms of the Apache License 2.0
 
