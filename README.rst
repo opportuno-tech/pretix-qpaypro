@@ -44,7 +44,7 @@ The language translations for this project are handled on Weblate.org, you can s
 License
 -------
 
-Copyright 2019 Alvaro Enrique Ruano
+Copyright 2019 Opportuno Tech
 
 Released under the terms of the Apache License 2.0
 
